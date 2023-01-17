@@ -5,8 +5,7 @@ str_d:  ds      10h             ; reserve 16 bytes
  
         iseg at 80h 
 str_i:  ds      10h             ; reserve 16 bytes 
-stack:  ds      70h             ; reserve the rest for 
-stack 
+stack:  ds      70h             ; reserve the rest for stack 
  
         xseg 
 str_x:  ds      10h             ; reserve 16 bytes 
@@ -16,7 +15,7 @@ flag:   dbit    1               ; reserve 1 bit for flag
  
         cseg 
         mov     wdtcn,#DEh      ; Disable watchdog 
-        mov     wdtcn,#ADh 
+        mov     wdtcn,#DEh      ; Disable watchdog
         mov     r0,#255 
 clrall: mov     @r0,#0          ; clear all internal ram 
         djnz    r0,clrall 
