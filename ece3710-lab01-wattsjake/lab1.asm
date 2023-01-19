@@ -7,7 +7,7 @@ str_d:  ds      10h             ; reserve 16 bytes
 str_i:  ds      10h             ; reserve 16 bytes 
 stack:  ds      70h             ; reserve the rest for stack 
  
-        xseg 
+        xseg at 20h 		; print at mem location 20h
 str_x:  ds      10h             ; reserve 16 bytes 
  
         bseg 
