@@ -1,11 +1,12 @@
 Basic Input and Output 
 =======================
 
-Objective: The student should be able to write, assemble, download and test a 
+Objective: Write, assemble, download and test a 
 simple program that manipulates the I/O ports on a microcontroller. 
------------------------------
+-------------------------------------------------------------------
+
  
-Parts: 
+### Parts: 
     1-C8051FX20-TB Evaluation Board & USB Debug Adapter 
     Project Board 
     1 96-pin edge card connector 
