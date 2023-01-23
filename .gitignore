@@ -1,3 +1,14 @@
+#silicon labs IDE
+*.OBJ
+*.LST
+*.wsp
+*.M51
+*.out
+*cyglink.txt
+*.INC
+
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -148,3 +159,4 @@ scratch-asm/blinky/blinky.OBJ
 scratch-asm/blinky/blinky.M51
 scratch-asm/blinky/blinky.LST
 scratch-asm/blinky/blinky.#2
+ece3710-lab02-wattsjake/basic_input_output
