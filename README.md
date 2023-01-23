@@ -6,8 +6,8 @@
 Repository for course work for Embedded Systems Weber State University
 --------------------------------------------------------------------------------
 
-* Link to [TODO:](TODO.md) 
-* Link to [8051 documentation:](documents/C8051F020DK_user_guide.pdf)
+* Link to: [TODO](TODO.md) 
+* Link to: [8051 documentation](documents/C8051F020DK_user_guide.pdf)
 
 
 
