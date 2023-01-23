@@ -59,12 +59,12 @@ put connectors and other components on the side of the board with
 the white legend. The side without the legend should be for 
 soldering only. 
  
-IMPORTANT: The resistor networks must be installed in the right 
+__IMPORTANT:__ The resistor networks must be installed in the right 
 orientation. Failure to do so will result in the unpleasant chore of 
 desoldering. Make sure the pin with the “dot” on the resistor pack is 
 connected to the square pad on the circuit board. 
  
-IMPORTANT: If you solder the bar graph in backwards, do not try 
+__IMPORTANT:__ If you solder the bar graph in backwards, do not try 
 to desolder it. This problem can be handled in software. 
  
 Use jumper wire to implement the circuits you designed in your lab 
