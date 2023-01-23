@@ -1,18 +1,20 @@
-Title: Basic Input and Output 
------------------------------
+Basic Input and Output 
+=======================
 
 Objective: The student should be able to write, assemble, download and test a 
 simple program that manipulates the I/O ports on a microcontroller. 
+-----------------------------
  
-Parts: 1-C8051FX20-TB Evaluation Board & USB Debug Adapter 
-Project Board 
-1 96-pin edge card connector 
-3 32-pin connectors 
-1 10-LED bar graph 
-2 6-pin Bussed Resistor Networks (220) 
-1 8-position DIP switch 
-2 pushbutton switches 
-jumper wire 
+Parts: 
+    1-C8051FX20-TB Evaluation Board & USB Debug Adapter 
+    Project Board 
+    1 96-pin edge card connector 
+    3 32-pin connectors 
+    1 10-LED bar graph 
+    2 6-pin Bussed Resistor Networks (220) 
+    1 8-position DIP switch 
+    2 pushbutton switches 
+    jumper wire 
  
 Software: Silicon Laboratories IDE version 3.50.00 or greater 
  
