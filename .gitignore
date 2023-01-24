@@ -1,4 +1,4 @@
-#silicon labs IDE
+#Silicon Labs IDE
 *.OBJ
 *.LST
 *.wsp
@@ -6,6 +6,9 @@
 *.out
 *cyglink.txt
 *.INC
+*.#1
+*.#2
+*.#3
 
 
 
