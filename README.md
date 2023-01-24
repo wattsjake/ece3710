@@ -3,7 +3,7 @@
 ![alt text][logo]
 ======
 
-Repository for course work for Embedded Systems Weber State University
+Embedded Systems Weber State University
 --------------------------------------------------------------------------------
 
 * Link to: [TODO](TODO.md) 
