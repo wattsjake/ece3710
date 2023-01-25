@@ -86,9 +86,9 @@ useful for this purpose. The previous state of the buttons is kept in R7
 and the buttons newly pressed are returned in the accumulator. 
  
 ### Check_btns:
- MOV A,P1 ; assumes your buttons are on P1 
- CPL A ; make buttons active-high 
- XCH A,R7 ; save new button state, retrieve old 
- XRL A,R7 ; new xor old, so 1s = changed buttons 
- ANL A,R7 ; mask off released buttons 
- RET  ; pressed buttons are now 1s in A 
+    MOV A,P1 ; assumes your buttons are on P1 
+    CPL A ; make buttons active-high 
+    XCH A,R7 ; save new button state, retrieve old 
+    XRL A,R7 ; new xor old, so 1s = changed buttons 
+    ANL A,R7 ; mask off released buttons 
+    RET  ; pressed buttons are now 1s in A 
