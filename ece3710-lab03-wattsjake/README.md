@@ -35,7 +35,7 @@ of the bar graph.
  Create a project file for this lab, Add tugowar.asm to your project 
 and build it.  Make sure there are no assembly errors. 
  
-Note. Mechanical switches (such as pushbuttons) almost always 
+__Note__ Mechanical switches (such as pushbuttons) almost always 
 “bounce”. That is to say that the switch may open and close dozens 
 of times while it transitions from an open to closed state and vice 
 versa.  Obviously you won’t want your program to react to each 
@@ -44,7 +44,7 @@ less, a period that is imperceptible to humans.  The upshot is that
 your program can “debounce” switches simply by sampling them 
 every 20 milliseconds or so. 
  
-Also note. The C8051F020 has an internal oscillator frequency of 
+__Note__ The C8051F020 has an internal oscillator frequency of 
 about 2MHz (500ns period clock cycle) and DJNZ takes 3 cycles 
 (1.5us).  Most of the other instructions on the C8051F020 require 
 the same number of clock cycles as they have bytes.  Keep this in 
@@ -59,11 +59,12 @@ lab instructor your preparation work which, in this case, consists of
 code. (There are no new schematics to draw nor is there new 
 hardware to assemble.) 
  
-Lab Work: Using the IDE, download your program code and run it. Verify that it 
+### Lab Work:
+Using the IDE, download your program code and run it. Verify that it 
 seems to meet the requirements on the previous page.  Debug it if 
 necessary. 
  
- Stop the program and reset it.  Set a breakpoint right before or after 
+Stop the program and reset it.  Set a breakpoint right before or after 
 the 20ms delay. This allows you to test the program in “slow motion.” 
 Each time you hit the breakpoint, press or release a pushbutton and 
 “continue” the program. Verify that the lit LEDs (a) move left when the 
@@ -75,16 +76,18 @@ your lab instructor.
  
 Print a copy of your code and affix it to you lab book. 
  
- Write a summary/conclusion in your lab book and present it to your 
+Write a summary/conclusion in your lab book and present it to your 
 lab instructor for grading. (The rubric is given in Lab 2) 
  
-Hint: detecting that a button is pressed requires that you keep track 
+__Hint__ Detecting that a button is pressed requires that you keep track 
 of what the button was last time you checked it. You are free to do 
 that in any way that you want, but the subroutine below has proven 
 useful for this purpose. The previous state of the buttons is kept in R7 
 and the buttons newly pressed are returned in the accumulator. 
  
-Check_btns:  MOV A,P1 ; assumes your buttons are on P1 
+### Check_btns:  
+
+ MOV A,P1 ; assumes your buttons are on P1 
  CPL A ; make buttons active-high 
  XCH A,R7 ; save new button state, retrieve old 
  XRL A,R7 ; new xor old, so 1s = changed buttons 
