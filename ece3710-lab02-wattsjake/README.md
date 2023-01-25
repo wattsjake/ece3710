@@ -17,9 +17,12 @@ simple program that manipulates the I/O ports on a microcontroller.
     2 pushbutton switches 
     jumper wire 
  
-Software: Silicon Laboratories IDE version 3.50.00 or greater 
+### Software: 
+    Silicon Laboratories IDE version 3.50.00 or greater 
  
-Preparation:  Starting with this laboratory exercise, students are required to do 
+### Preparation:
+
+Starting with this laboratory exercise, students are required to do 
 preparatory work before coming to lab. This way, time with the 
 instructor can be spent troubleshooting hardware and debugging 
 code instead of assembling hardware and composing code. In this 
