@@ -4,7 +4,6 @@ Basic Input and Output
 Objective: Write, assemble, download and test a 
 simple program that manipulates the I/O ports on a microcontroller. 
 -------------------------------------------------------------------
-
  
 ### Parts: 
     1-C8051FX20-TB Evaluation Board & USB Debug Adapter 
@@ -17,9 +16,12 @@ simple program that manipulates the I/O ports on a microcontroller.
     2 pushbutton switches 
     jumper wire 
  
-Software: Silicon Laboratories IDE version 3.50.00 or greater 
+### Software: 
+    Silicon Laboratories IDE version 3.50.00 or greater 
  
-Preparation:  Starting with this laboratory exercise, students are required to do 
+### Preparation:
+
+Starting with this laboratory exercise, students are required to do 
 preparatory work before coming to lab. This way, time with the 
 instructor can be spent troubleshooting hardware and debugging 
 code instead of assembling hardware and composing code. In this 
@@ -76,14 +78,14 @@ the pushbutton and DIP switches and reflects the state of the
 pushbuttons on two of the LEDs and the state of the DIP switches 
 on the other 8 LEDs. 
  
-Note. In order for the C8051F020 to behave as a normal 8051, you 
+__Note__ In order for the C8051F020 to behave as a normal 8051, you 
 must execute the following instructions when your program starts: 
  
- mov wdtcn,#0DEh ; disable watchdog 
- mov wdtcn,#0ADh 
- mov xbr2,#40h ; enable port output 
- 
- Remember to include (c8051f020.inc) 
+    mov wdtcn,#0DEh ; disable watchdog 
+    mov wdtcn,#0ADh 
+    mov xbr2,#40h ; enable port output 
+
+    Remember to include (c8051f020.inc) 
  
 Create a project using the IDE and build your code as you did in 
 Lab 1 (but of course, in a different folder). Find and correct syntax 
