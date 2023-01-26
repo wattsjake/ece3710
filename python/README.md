@@ -1,5 +1,11 @@
 Python Script.py Usage
 ======================
 
-use python script.py to create new folders
+Use this python script.py to create new lab folders and various other files within said folder.
+
+Usage
+-----
+
+    python script.py [options] [arguments]
+    
 
