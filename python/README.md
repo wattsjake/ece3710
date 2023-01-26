@@ -6,6 +6,11 @@ Use this python script.py to create new lab folders and various other files with
 Usage
 -----
 
-    python script.py [options] [arguments]
-    
+    python script.py [lab number '##']
+
+Example
+-------
+
+    python script.py 04
+
 
