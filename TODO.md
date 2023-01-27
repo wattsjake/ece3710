@@ -1,7 +1,11 @@
 TODO
 ====
 
+<<<<<<< HEAD
 - [X] add json file to script.py
+=======
+- [ ] create new schematic symbol for the C8051F02x
+>>>>>>> 249adcf37b818453d004dc886d1cf3c32cd7d8e0
 - [ ] create lab04 and create project in IDE
 - [ ] merge ece3710-notes rtd to this repo
 - [ ] check .ignore files when you create another project
