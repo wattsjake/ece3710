@@ -1,15 +1,12 @@
 TODO
 ====
 
-<<<<<<< HEAD
-- [X] add json file to script.py
-=======
-- [ ] create new schematic symbol for the C8051F02x
->>>>>>> 249adcf37b818453d004dc886d1cf3c32cd7d8e0
+
 - [ ] create lab04 and create project in IDE
 - [ ] merge ece3710-notes rtd to this repo
 - [ ] check .ignore files when you create another project
 - [ ] Add to readme.md of script.py folder
+- [X] add json file to script.py
 - [x] ~~print documentation create spiral bound book~~
 - [x] ~~figure out how to cross out TODO txt~~
 - [x] create a python script that creates a new folder with a README.md and a TODO.md and title it with ece3710-lab##-wattsjake make it so you can type in your title of file
