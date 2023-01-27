@@ -1,5 +1,6 @@
 
 {
     "firstName": "jake",
-    "lastName": "watts"
+    "lastName": "watts",
+    "course": "ece3710",
 }

@@ -46,6 +46,9 @@ def main():
     print("Creating folder...")
     idx = user_input()
     print(idx)
+    #print list to 96
+    for i in range(1, 97):
+       print(i)
 
 
 if __name__ == "__main__":
