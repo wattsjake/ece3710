@@ -4,7 +4,7 @@ import time
 
 # Check if the user has provided the correct number of arguments
 if len(sys.argv) != 2:
-    print("Usage: python script.py <foldername>")
+    print("Usage: python script.py <lab number ##>")
     sys.exit(0)
 
 # Get the parent directory of the current directory
