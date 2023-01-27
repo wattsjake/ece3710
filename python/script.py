@@ -31,24 +31,44 @@ def load_json():
 def user_input():
     # Check if the user has provided the correct number of arguments
     if len(sys.argv) != 2:
-        print("Usage: python script.py <foldername>")
+        print("Oops... Something very specific happened.\n\
+Check your usage: python script.py <foldername>\n\
+-h     : print this help message and exit (also -? or --help)")
         sys.exit(0)
 
     # Check if the user has provided the help argument
-    if (sys.argv[1] == "-help" or sys.argv[1] == "-h"):
-        print("Usage: python script.py <foldername>")
+    if (sys.argv[1] == "-help" or sys.argv[1] == "-h" or sys.argv[1] == "-?"):
+        print("usage : " + os.path.dirname(os.getcwd()) +"\python> python3 script.py <index number>\n\
+Options and arguments (and corresponding environment variables):\n\
+-E     : Edit .json file\n\
+-h     : print this help message and exit (also -? or --help)")
+        sys.exit(0)
+
+    if (sys.argv[1] == "-E"):
+        print("Editing .json file")
+        #ask user for first name
+        first_name = input("Enter your first name: ")
+        #ask user for last name
+        last_name = input("Enter your last name: ")
+        #ask for course number
+        course_number = input("Enter your course number: ")
+
+        #create json object
+        json_object = {"first_name": first_name, "last_name": last_name, "course_number": course_number}
+
+        json_file = glob.glob('*.json') # get json file
+
+        #save json object to file
+        with open(str(json_file[0]), "w") as outfile:
+            json.dump(json_object, outfile)
+
         sys.exit(0)
 
     #Get the folder number from the command line
     return sys.argv[1]
 
 def main():
-    print("Creating folder...")
-    idx = user_input()
-    print(idx)
-    #print list to 96
-    for i in range(1, 97):
-       print(i)
+    user_input()
 
 
 if __name__ == "__main__":
