@@ -7,9 +7,30 @@ def parent_dir():
     # Get the parent directory of the current directory
     return os.path.dirname(os.getcwd())
 
-def create_folder(idx):
-    # Create the folder
-    foldername = "ece3710-lab" + str(idx) + "-wattsjake"
+def create_folder_name(idx, json_object):
+    #create folder name in the format of course_number-lab-idx-last_name-first_name
+    foldername = json_object["course_number"] + "-" + "lab" + idx + "-" + json_object["last_name"] + json_object["first_name"]
+    # print("foldername: " + foldername)
+    return foldername
+
+def create_internal_folders(foldername):
+    #create readme.md file in folder
+    with open(os.path.join(parent_dir, foldername, "readme.md"), "w") as f:
+        f.write("This is a readme file")
+    
+    #create todo.md file in folder
+    with open(os.path.join(parent_dir, foldername, "todo.md"), "w") as f:
+        f.write("This is a todo file")
+
+    #create docs folder in folder
+    os.mkdir(os.path.join(parent_dir, foldername, "docs"))
+
+    #create src folder in folder
+    os.mkdir(os.path.join(parent_dir, foldername, "src"))
+
+def delete_folder(foldername):
+    #delete folder
+    os.rmdir(os.path.join(parent_dir, foldername))
 
 def check_folder_exists(foldername):
     #check to see if folder already exists
@@ -68,7 +89,8 @@ Options and arguments (and corresponding environment variables):\n\
 
 def main():
     idx = user_input()
-    print("Creating folder ece3710-lab" + str(idx) + "-wattsjake")
+    json_object = load_json()
+    foldername = create_folder_name(idx, json_object)
 
 if __name__ == "__main__":
      main()
