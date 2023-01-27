@@ -2,18 +2,10 @@ import glob
 import json
 import os
 import sys
-import time
 
-<<<<<<< HEAD
-# Check if the user has provided the correct number of arguments
-if len(sys.argv) != 2:
-    print("Usage: python script.py <lab number ##>")
-    sys.exit(0)
-=======
 def parent_dir():
     # Get the parent directory of the current directory
     return os.path.dirname(os.getcwd())
->>>>>>> 249adcf37b818453d004dc886d1cf3c32cd7d8e0
 
 def create_folder(idx):
     # Create the folder
@@ -75,8 +67,8 @@ Options and arguments (and corresponding environment variables):\n\
     return sys.argv[1]
 
 def main():
-    user_input()
-
+    idx = user_input()
+    print("Creating folder ece3710-lab" + str(idx) + "-wattsjake")
 
 if __name__ == "__main__":
      main()
