@@ -57,7 +57,7 @@ feed.
 Create a project file for this lab. Add your program to your project, 
 build it and make sure there are no errors. 
  
-__Note__ An easy way to get a random number generator is to bump a 
+__Note__: An easy way to get a random number generator is to bump a 
 modulo-10 counter each time you check the buttons (which should 
 happen every 10 ms.) On the 8051 such a counter is easy if you 
 are comfortable with it counting down from 10, e.g. 10,9...2,1,10, 
@@ -73,10 +73,10 @@ Then, whenever the button is pressed or character is received, the
 value of random (a variable declared in the data segment) will be a 
 random number from 1 to 10. 
  
-__Note__ The C8051F020 has two serial ports, so you will need to use 
+__Note__: The C8051F020 has two serial ports, so you will need to use 
 registers SCON0 and SBUF0 instead of SCON and SBUF. 
  
-__Note__ After reset, the C8051F020 uses an internal 2 MHz system 
+__Note__: After reset, the C8051F020 uses an internal 2 MHz system 
 clock that is not suitable for generating an accurate 9600 baud rate. 
 Fortunately, the microcontroller board contains a 22.1184 MHz 
 crystal that can be used as the system clock, but it is tricky to turn 
