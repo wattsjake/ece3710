@@ -1,6 +1,7 @@
 TODO
 ====
 
+- [ ] auto find the latest lab number and create a new folder incrementing the number by 1
 - [ ] create lab04 and create project in IDE
 - [ ] merge ece3710-notes rtd to this repo
 - [ ] check .ignore files when you create another project
