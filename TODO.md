@@ -1,11 +1,12 @@
 TODO
 ====
 
+
 - [ ] auto find the latest lab number and create a new folder incrementing the number by 1
-- [ ] create lab04 and create project in IDE
-- [ ] merge ece3710-notes rtd to this repo
+- [x] create lab04 and create project in IDE
+- [ ] ~~merge ece3710-notes rtd to this repo~~
 - [ ] check .ignore files when you create another project
-- [ ] Add to readme.md of script.py folder
+- [x] Add to readme.md of script.py folder
 - [X] add json file to script.py
 - [x] ~~print documentation create spiral bound book~~
 - [x] ~~figure out how to cross out TODO txt~~
