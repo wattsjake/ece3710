@@ -20,17 +20,16 @@ Main:          CALL Initilize
 start:         MOV R4, #10
                CALL Delay
 							 MOV A, game_state
+							 CALL LED_driver
+							 MOV A, game_state
+							 jmp END_STATE
 
-							 CJNE A, #00h, GMST ;check game state #00h if equal jump to main
-							 JMP END_DISP
-GMST: 				 CJNE A, #08h, CONT ;check game state #08h if equal jump to main
-							 JMP END_DISP
 							 
-CONT:					 CALL LED_driver
-               CALL check_buttons
+CONT:					 CALL check_buttons
 							 CJNE A, #01, check_btn2
                INC game_state
 							 jmp start
+
 check_btn2:    CJNE A, #02,  start
                DEC game_state
 							 JMP start
@@ -76,13 +75,40 @@ Fast_forward:
 
 							 RET
 
-END_DISP:			 
+END_STATE:		 CJNE A, #00h, GMST ;check game state #00h if equal jump to main
+							 JMP END_DISP
+GMST: 				 CJNE A, #08h, CONT ;check game state #08h if equal jump to main
+							 JMP END_DISP
+
+END_DISP:		   
+							 CALL Delay
+							 CALL Delay	 
 							 MOV R4, #0FFh
 							 MOV P5, R4
 							 MOV P3, R4
-							 ;CALL Delay
-							 ;CALL Delay
-							 JMP CHASE_DISP					 	 
+							 CALL Delay
+							 CALL Delay
+							 MOV R4, #00h
+							 MOV P5, R4
+							 MOV P3, R4
+							 CALL Delay
+							 CALL Delay
+							 MOV R4, #0FFh
+							 MOV P5, R4
+							 MOV P3, R4
+							 CALL Delay
+							 CALL Delay
+							 MOV R4, #00h
+							 MOV P5, R4
+							 MOV P3, R4
+							 CALL Delay
+							 CALL Delay
+							 MOV R4, #0FFh
+							 MOV P5, R4
+							 MOV P3, R4
+							 CALL Delay
+							 CALL Delay
+							 JMP Main					 	 
                
 Delay:         
 delay_loop_out:MOV R3, #250
