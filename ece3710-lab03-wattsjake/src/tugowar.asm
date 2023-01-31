@@ -7,13 +7,13 @@
 ;******************************************************************************
 $include (c8051f020.inc) 
 
-        mov wdtcn,#0DEh ; disable watchdog 
-        mov wdtcn,#0ADh 
-        mov xbr2,#40h ; enable port output
+        			 mov wdtcn,#0DEh ; disable watchdog 
+        			 mov wdtcn,#0ADh 
+        			 mov xbr2,#40h ; enable port output
 
-				DSEG AT 30H
-last_button: 	ds 1
-game_state: 	ds 1
+							 DSEG AT 30H
+last_button: 	 ds 1
+game_state: 	 ds 1
 
 							 CSEG
 Main:          CALL Initilize
@@ -21,12 +21,12 @@ start:         MOV R4, #10
                CALL Delay
 							 MOV A, game_state
 
-							 CJNE A, #00h, THERE
-							 JMP Main
-THERE: 				 CJNE A, #08h, HERE
-							 JMP Main
+							 CJNE A, #00h, GMST ;check game state #00h if equal jump to main
+							 JMP END_DISP
+GMST: 				 CJNE A, #08h, CONT ;check game state #08h if equal jump to main
+							 JMP END_DISP
 							 
-HERE:					 CALL LED_driver
+CONT:					 CALL LED_driver
                CALL check_buttons
 							 CJNE A, #01, check_btn2
                INC game_state
@@ -70,10 +70,19 @@ LED_helper:		 MOV  dptr, #P1_table
 Turn_off:      JZ Fast_forward
                MOV R4, #0FFh
                MOV P5, R4
+
 Fast_forward:  
 							 RET
 
 							 RET
+
+END_DISP:			 
+							 MOV R4, #00h
+							 MOV P5, R4
+							 MOV P3, R4
+							 CALL Delay
+							 CALL Delay
+							 JMP Main					 	 
                
 Delay:         
 delay_loop_out:MOV R3, #250
@@ -81,15 +90,15 @@ delay_loop_in: NOP
                NOP
 							 DJNZ R3, delay_loop_in
 							 DJNZ R4, delay_loop_out   
-							 RET  
+							 RET						   
 
 Initilize:     MOV game_state, #4
                MOV A, game_state
                MOV R4, #55h
 				       MOV P5, R4
 
-							 MOV R4, #100
-							 CALL Delay
+							 ;MOV R4, #100
+							 ;CALL Delay
 
 							 CALL LED_driver
 
@@ -100,5 +109,26 @@ Initilize:     MOV game_state, #4
 							 RET
 
                jmp start ; Need a flag here for win state
+
+
+CHASE_TABLE_P5:   DB 0FEh, 0FDh, 0FBh, 0F7h, 0EFh, 0DFh, 0BFh, 07Fh
+CHASE_TABLE_P3:   DB 01h, 02h
+
+
+CHASE_DISP:    MOV A, 0FFh
+							 MOV R7, 0FFh
+
+CONTINUE:			 MOV A, R7
+						 	 MOV dptr, #CHASE_TABLE_P5
+							 MOVC A, @A+dptr
+							 MOV P5, A
+							 CALL Delay
+							 CALL Delay
+
+							 MOV A, R7
+							 INC A
+							 MOV R7, A
+							 CJNE R7, #08h, CONTINUE
+							 JMP Main
 
 							 END   
