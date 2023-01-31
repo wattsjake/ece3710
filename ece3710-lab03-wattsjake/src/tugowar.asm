@@ -77,12 +77,12 @@ Fast_forward:
 							 RET
 
 END_DISP:			 
-							 MOV R4, #00h
+							 MOV R4, #0FFh
 							 MOV P5, R4
 							 MOV P3, R4
-							 CALL Delay
-							 CALL Delay
-							 JMP Main					 	 
+							 ;CALL Delay
+							 ;CALL Delay
+							 JMP CHASE_DISP					 	 
                
 Delay:         
 delay_loop_out:MOV R3, #250
@@ -115,20 +115,17 @@ CHASE_TABLE_P5:   DB 0FEh, 0FDh, 0FBh, 0F7h, 0EFh, 0DFh, 0BFh, 07Fh
 CHASE_TABLE_P3:   DB 01h, 02h
 
 
-CHASE_DISP:    MOV A, 0FFh
-							 MOV R7, 0FFh
+CHASE_DISP:    MOV A, 00h
+               MOV R7, 00h
 
-CONTINUE:			 MOV A, R7
-						 	 MOV dptr, #CHASE_TABLE_P5
-							 MOVC A, @A+dptr
-							 MOV P5, A
-							 CALL Delay
-							 CALL Delay
+CONTINUE:      MOV A, R7
+               MOV dptr, #CHASE_TABLE_P5
+               MOVC A, @A+dptr
+               MOV P5, A
+               CALL Delay
+               CALL Delay
+               INC R7
+               CJNE R7, #08h, CONTINUE
+               JMP Main
 
-							 MOV A, R7
-							 INC A
-							 MOV R7, A
-							 CJNE R7, #08h, CONTINUE
-							 JMP Main
-
-							 END   
+               END   
