@@ -1,15 +1,24 @@
 $include (c8051f020.inc) 
 
-        			mov wdtcn,#0DEh ; disable watchdog 
-       				mov wdtcn,#0ADh 
-        			mov xbr2,#40h ; enable port output
+        mov wdtcn,#0DEh ; disable watchdog 
+        mov wdtcn,#0ADh 
+        mov xbr2,#40h ; enable port output
 
-							DSEG AT 30H
-last_button:	ds 1
-game_state: 	ds 1
+				DSEG AT 30H
+last_button: ds 1
+game_state: ds 1
 
 
-							 CSEG
+				CSEG
+
+
+
+
+;; TODO
+;; - Add routine for controlling state
+
+
+
 Main:          CALL Initilize
 start:         MOV R4, #10
                CALL Delay
@@ -39,7 +48,7 @@ P2_table:      DB 0FEh, 0FCh ; 8 9
 
 LED_driver:    CJNE A, #07h, NEXT1
 							 MOV R4, #07fh
-							 MOV P3, R4
+							 MOV P5, R4
 							 JMP NEXT
 
 NEXT1:
@@ -50,7 +59,7 @@ NEXT:					 SUBB A, #7
                CALL Turn_off
 							 MOV dptr, #P2_table
 							 MOVC A, @A+dptr
-							 MOV P5, A
+							 MOV P3, A
 							 RET
                
 							 
@@ -67,22 +76,27 @@ Turn_off:      JZ Fast_forward
 Fast_forward:  
 							 RET
 
+
+							 
+
+							 RET
+               
+							 
+
 Delay:         
 delay_loop_out:MOV R3, #250
 delay_loop_in: NOP
                NOP
 							 DJNZ R3, delay_loop_in
 							 DJNZ R4, delay_loop_out   
-							 RET							  
+							 RET  
 
-Initilize:     MOV game_state, #6
+Initilize:     MOV game_state, #4
                MOV A, game_state
                MOV R4, #55h
 				       MOV P5, R4
 
 							 MOV R4, #100
-							 CALL Delay ;letting you know the machine booted
-							 CALL Delay
 							 CALL Delay
 
 							 CALL LED_driver
@@ -100,6 +114,3 @@ Initilize:     MOV game_state, #6
                jmp start ; Need a flag here for win state
 
 							 END   
-
-
-
