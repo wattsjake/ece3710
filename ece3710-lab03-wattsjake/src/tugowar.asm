@@ -1,11 +1,10 @@
 ;******************************************************************************
-;*  Course: ECE 3710 Embedded Systems										  *
+;*  Course: ECE 3710 Embedded Systems										                      *
 ;*  Assignment: Lab03                                                         *
 ;*  Author:  Jack Fernald                                                     *
 ;*  Verified: Jacob Watts                                                     *
 ;*  Date: 2023-01-30                                                          *
 ;******************************************************************************
-
 $include (c8051f020.inc) 
 
         mov wdtcn,#0DEh ; disable watchdog 
@@ -15,7 +14,6 @@ $include (c8051f020.inc)
 				DSEG AT 30H
 last_button: 	ds 1
 game_state: 	ds 1
-
 
 							 CSEG
 Main:          CALL Initilize
