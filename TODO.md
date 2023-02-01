@@ -1,7 +1,7 @@
 TODO
 ====
 
-
+- [ ] create header program to auto create and populate each .asm program
 - [ ] auto find the latest lab number and create a new folder incrementing the number by 1
 - [ ] check .ignore files when you create another project
 - [x] Add to readme.md of script.py folder
