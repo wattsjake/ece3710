@@ -24,8 +24,6 @@ run:		CALL display_p5
             CJNE A, #0Ah, check_state
             JMP initialize
 			
-
-
 ;-----P5_table
 p5_table: db 0FEh, 0FDh, 0FBh, 0F7h, 0EFh, 0DFh, 0BFh, 07Fh
 ;-----p3_table
@@ -82,12 +80,7 @@ here1:		MOV R3, #250
 here2:		DJNZ R3, here2
 			DJNZ R4, here1
 			RET
-
-
-
-
-		
-
+			
 ;-----------------------------------------------------------------------------
 ; End of file.
 END
