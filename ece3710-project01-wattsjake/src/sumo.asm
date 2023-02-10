@@ -6,17 +6,16 @@
 ;               each will try to push the 
 ;               other out of the ring.
 ;
-;Author:        Jacob Watts & Jack Fernald
+;Authors:        Jacob Watts, Jack Fernald
 ;Organization:  Weber State University ECE 3710
 ;Revision History
 ;Date[YYYYMMDD] Author      Description
 ;----           ------      -----------
 ;20230207       Jacob W.    initial commit
 ;20230209       Jacob W.    added clear RAM
-;20230209       Jacob W.    add Jack F. to author
-;20230209       Jacob W.    added sumo1 & 2
 ;********************************************************
 $include (c8051f020.inc) 
+
         mov wdtcn,#0DEh ; disable watchdog 
         mov wdtcn,#0ADh 
         mov xbr2,#40h ; enable port output
@@ -26,12 +25,6 @@ $include (c8051f020.inc)
 clrall: mov     @r0,#0
         djnz    r0,clrall
 
-;---------------PLACE CODE BELOW THIS LINE---------------
-
-        DSEG AT 30H
-sumo1: 	 ds 1
-sumo2: 	 ds 1
-
         cseg
         mov A, P2 ;DIP switches 
         anl A, #7 ;use only the first three (3) switches
@@ -39,9 +32,36 @@ sumo2: 	 ds 1
         inc A
         mov sumo2, A
 
+        ;mov R3, 00h
+        ;mov R4, 00h
 
 
 loop:   jmp loop
+;; Random Delay Routine
+;; LED Driver Routine
+;; Check Btns Routine
+
+
+
+led_driver: 
+
+rand_delay:
+
+chk_btn:    MOV A, P1
+            CPL A
+            XCH A, last_button
+            XRL A, last_button
+            ANL A, last_button
+
+            cjne A, R4, no_change 
+
+           
+
+
+ no_change: mov R3, A
+            RET
+
+
         END
 
 
