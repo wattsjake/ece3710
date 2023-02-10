@@ -9,7 +9,7 @@ $include (c8051f020.inc)
 clrall: mov     @r0,#0
         djnz    r0,clrall 
 
-	    cseg
+	cseg
 
 loop:   mov A, #03Ch
         mov R1, #096h
