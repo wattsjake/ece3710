@@ -6,7 +6,7 @@
 ;               each will try to push the 
 ;               other out of the ring.
 ;
-;Author:        Jacob Watts
+;Authors:        Jacob Watts, Jack Fernald
 ;Organization:  Weber State University ECE 3710
 ;Revision History
 ;Date[YYYYMMDD] Author      Description
