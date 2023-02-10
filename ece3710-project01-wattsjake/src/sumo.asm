@@ -14,9 +14,9 @@
 ;20230207       Jacob W.    initial commit
 ;20230209       Jacob W.    added clear RAM
 ;20230209       Jacob W.    add Jack F. to author
+;20230209       Jacob W.    added sumo1 & 2
 ;********************************************************
 $include (c8051f020.inc) 
-
         mov wdtcn,#0DEh ; disable watchdog 
         mov wdtcn,#0ADh 
         mov xbr2,#40h ; enable port output
@@ -26,10 +26,18 @@ $include (c8051f020.inc)
 clrall: mov     @r0,#0
         djnz    r0,clrall
 
+;---------------PLACE CODE BELOW THIS LINE---------------
+
+        DSEG AT 30H
+sumo1: 	 ds 1
+sumo2: 	 ds 1
+
         cseg
-        mov A, P2
-        anl A, #7
-        mov R3, A
+        mov A, P2 ;DIP switches 
+        anl A, #7 ;use only the first three (3) switches
+        mov sumo1, A
+        inc A
+        mov sumo2, A
 
 
 loop:   jmp loop
