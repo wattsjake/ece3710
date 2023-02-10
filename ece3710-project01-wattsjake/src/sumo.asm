@@ -35,9 +35,11 @@ sumo2: 	 ds 1
         cseg
         mov A, P2 ;DIP switches 
         anl A, #7 ;use only the first three (3) switches
-        mov sumo1, A
+        mov sumo1, A 
         inc A
-        mov sumo2, A
+        mov sumo2, A ;status of DIP SW inc A and save
+        
+
 
 
 loop:   jmp loop
