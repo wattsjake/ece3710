@@ -6,13 +6,14 @@
 ;               each will try to push the 
 ;               other out of the ring.
 ;
-;Author:        Jacob Watts
+;Author:        Jacob Watts & Jack Fernald
 ;Organization:  Weber State University ECE 3710
 ;Revision History
 ;Date[YYYYMMDD] Author      Description
 ;----           ------      -----------
 ;20230207       Jacob W.    initial commit
 ;20230209       Jacob W.    added clear RAM
+;20230209       Jacob W.    add Jack F. to author
 ;********************************************************
 $include (c8051f020.inc) 
 
@@ -26,9 +27,10 @@ clrall: mov     @r0,#0
         djnz    r0,clrall
 
         cseg
+        mov A, P2
+        anl A, #7
+        mov R3, A
 
-        ;mov R3, 00h
-        ;mov R4, 00h
 
 loop:   jmp loop
         END
