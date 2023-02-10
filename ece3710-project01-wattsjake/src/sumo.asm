@@ -44,6 +44,14 @@ sumo2: 	 ds 1
 loop:   jmp loop
         END
 
+
+check_buttons:  MOV A, P1
+                CPL A
+                XCH A, last_button
+                XRL A, last_button
+                ANL A, last_button
+                RET
+
         this =
 
 
