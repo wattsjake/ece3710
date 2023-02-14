@@ -21,6 +21,8 @@ $include (c8051f020.inc)
         DSEG AT 30H
 sumo1: 	        ds 1
 sumo2: 	        ds 1
+player1:        ds 1
+player2:        ds 1
 last_button:    ds 1
         
         CSEG
@@ -36,13 +38,29 @@ clrall: mov     @r0,#0
 
 
 ;-------------- Initialization Code ---------------------
-        cseg
-        mov A, P2 ;DIP switches 
+        cseg 
 init:   mov A, P2 ;DIP switches 
         anl A, #7 ;use only the first three (3) switches
+        dec A
         mov sumo1, A 
-        inc A
+        dec A
         mov sumo2, A
+
+        mov A, sumo1
+        mov dptr, #init_table
+        movc A, @A+dptr
+        mov player1, A
+        
+        mov A, sumo2
+        dec A
+        mov dptr, #init_table
+        movc A, @A+dptr
+        mov player2, A
+
+        ;and player1, player2
+        mov A, #player1
+        anl A, #player2
+        mov P5, A
 
 ;-------------- Main Game Code --------------------------   
 main:   call delay
@@ -69,8 +87,9 @@ check_btn2:     CJNE A, #02, main
 
 ;------------- Randoom Delay Subroutine -----------------
 
-
-
+;------------- Look Up Table ----------------------------
+; The follow table consists of: 11111110, 11111101, 11111011, 11110111, 11101111, 11011111, 10111111, 01111111
+init_table: DB 0FEh, 0FDh, 0FBh, 0F7h, 0EFh, 0DFh, 0BFh, 07Fh
 
 ;--------------------- Delay ----------------------------
 delay:		MOV R4, #50 ;about 17.20ms
