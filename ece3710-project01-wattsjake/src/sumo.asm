@@ -48,25 +48,22 @@ init:   mov A, P2 ;DIP switches
 main:   call delay
         call check_buttons 
         cjne A, #01, check_btn2
-        mov R4, #0FFh
+        mov R3, sumo1
         mov P5, R4
-        jmp start
+        jmp main
         
-
-
-
-
-
 ;-------------- Check Buttons Subroutine ----------------
-check_buttons: MOV A, P1
-               CPL A
-               XCH A, last_button
-               XRL A, last_button
-               ANL A, last_button
-               RET
+check_buttons:  MOV A, P1
+                CPL A
+                XCH A, last_button
+                XRL A, last_button
+                ANL A, last_button
+                RET
 
-check_btn2:    CJNE A, #02, init
-               jmp start
+check_btn2:     CJNE A, #02, main
+                mov R4, sumo2
+                mov P5, R4
+                jmp main
 ;------------- Update LEDs Subroutine -------------------
 
 
