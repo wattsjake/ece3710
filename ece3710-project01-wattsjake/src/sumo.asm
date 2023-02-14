@@ -34,11 +34,6 @@ clrall: mov     @r0,#0
         djnz    r0,clrall
 ;---------------PLACE CODE BELOW THIS LINE---------------
 
-        DSEG AT 30H
-sumo1: 	 ds 1
-sumo2: 	 ds 1
-last_button: ds 1
-
 
 ;-------------- Initialization Code ---------------------
         cseg
@@ -50,7 +45,12 @@ init:   mov A, P2 ;DIP switches
         mov sumo2, A
 
 ;-------------- Main Game Code --------------------------   
-
+main:   call delay
+        call check_buttons 
+        cjne A, #01, check_btn2
+        mov R4, #0FFh
+        mov P5, R4
+        jmp start
         
 
 
@@ -58,37 +58,29 @@ init:   mov A, P2 ;DIP switches
 
 
 ;-------------- Check Buttons Subroutine ----------------
-
-
-
-
-;------------- Update LEDs Subroutine -------------------
-
-
-;------------- Randoom Delay Subroutine -----------------
-loop:   jmp loop
-start:  call delay
-        call check_buttons 
-        cjne A, #01, check_btn2
-        mov R4, #0FFh
-        mov P5, R4
-        jmp start
-
-check_btn2:    CJNE A, #02, init
-               jmp start
-
 check_buttons: MOV A, P1
                CPL A
                XCH A, last_button
                XRL A, last_button
                ANL A, last_button
                RET
-;-----DELAY
+
+check_btn2:    CJNE A, #02, init
+               jmp start
+;------------- Update LEDs Subroutine -------------------
+
+
+;------------- Randoom Delay Subroutine -----------------
+
+
+
+
+;--------------------- Delay ----------------------------
 delay:		MOV R4, #50 ;about 17.20ms
 here1:		MOV R3, #250			
 here2:		DJNZ R3, here2
-			DJNZ R4, here1
-			RET
+                DJNZ R4, here1
+                RET
 
 
 
