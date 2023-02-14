@@ -75,12 +75,14 @@ init:   mov A, P2 ;DIP switches
 main:   call delay
         call check_buttons 
 
-button1:cjne button_state, #something, button2
+button1:mov A, button_state
+        cjne A, #01, button2
         mov A, player1
         rr A
         mov player1, A
 
-button2:cjne button_state, #something, main_game
+button2:mov A, button_state
+        cjne A, #02, main_game
         mov A, player2
         rr A
         mov player2, A
@@ -102,11 +104,11 @@ check_buttons:  MOV A, P1
                 XRL A, last_button
                 ANL A, last_button
                 mov button_state, A
-check1          cjne A, #01h, check2
+check1:         cjne A, #01h, check2
                 RET
-check2          cjne A, #02h, check3
+check2:         cjne A, #02h, check3
                 RET
-check3          cjne A, #03h, check_buttons
+check3:         cjne A, #03h, check_buttons
                 RET
                 
              
