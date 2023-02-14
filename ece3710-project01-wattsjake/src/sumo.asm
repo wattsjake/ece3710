@@ -19,8 +19,9 @@
 $include (c8051f020.inc) 
 
         DSEG AT 30H
-sumo1: 	ds 1
-sumo2: 	ds 1
+sumo1: 	        ds 1
+sumo2: 	        ds 1
+last_button:    ds 1
         
         CSEG
         mov wdtcn,#0DEh ; disable watchdog 
@@ -49,8 +50,6 @@ check_buttons: MOV A, P1
 
 loop1:  jmp loop1
         END
-
-        this =
 
 
 
