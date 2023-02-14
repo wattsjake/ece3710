@@ -60,14 +60,14 @@ init:   mov A, P2 ;DIP switches
         anl A, player2
         mov P5, A
 
-				mov A, player1
-				rr A
-				mov player1, A
-				mov A, player2
-				rl A
-				mov player2, A
+        mov A, player1
+        rr A
+        mov player1, A
+        mov A, player2
+        rl A
+        mov player2, A
 
-				mov A, player1
+        mov A, player1
         anl A, player2
         mov P5, A
 
@@ -75,17 +75,17 @@ init:   mov A, P2 ;DIP switches
 main:   call delay
         call check_buttons 
 
-				cjne button_state, #something
-				mov A, player1
-				rr A
-				mov player1, A
+        cjne button_state, #something
+        mov A, player1
+        rr A
+        mov player1, A
 
-				cjne button_state, #something
-				mov A, player2
-				rr A
-				mov player2, A
+        cjne button_state, #something
+        mov A, player2
+        rr A
+        mov player2, A
 
-				mov A, player1
+        mov A, player1
         anl A, player2
         mov P5, A
 
@@ -102,7 +102,7 @@ check_buttons:  MOV A, P1
                 XCH A, last_button
                 XRL A, last_button
                 ANL A, last_button
-								mov button_state, A
+                mov button_state, A
                 RET
 
 check_btn2:     CJNE A, #02, main
@@ -122,8 +122,8 @@ init_table: DB 0FEh, 0FDh, 0FBh, 0F7h, 0EFh, 0DFh, 0BFh, 07Fh
 delay:		MOV R4, #50 ;about 17.20ms
 here1:		MOV R3, #250			
 here2:		DJNZ R3, here2
-          DJNZ R4, here1
-          RET
+                DJNZ R4, here1
+                RET
 
 
 
