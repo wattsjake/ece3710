@@ -49,7 +49,8 @@ check_buttons: MOV A, P1
 
 loop1:  jmp loop1
         END
-        
+
+        this =
 
 
 
