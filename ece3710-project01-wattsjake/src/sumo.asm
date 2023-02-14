@@ -55,19 +55,15 @@ init:   mov A, P2 ;DIP switches
         movc A, @A+dptr
         mov player2, A
 
-        ;and player1, player2
         mov A, player1
         anl A, player2
         mov P5, A
-
-			  jmp init
 
 ;-------------- Main Game Code --------------------------   
 main:   call delay
         call check_buttons 
         cjne A, #01, check_btn2
-        mov R3, sumo1
-        mov P5, R4
+
         jmp main
         
 ;-------------- Check Buttons Subroutine ----------------
