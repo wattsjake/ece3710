@@ -24,8 +24,9 @@ sumo1: 	        ds 1
 sumo2: 	        ds 1
 player1:        ds 1
 player2:        ds 1
-last_button:    ds 1
+last_button:    ds 1;used inside checkbuttons
 button_state:   ds 1
+button_rls:    ds 1;used to check button release
 rand_int:       ds 1
         
         CSEG
@@ -78,10 +79,10 @@ init:   mov A, P2 ;DIP switches
 ;-------------- Main Game Code --------------------------   
 main:   call delay
         call check_buttons
-        ;trying to work on button release
-        call delay
-        jb P1.0, btn1_release
-        jb P1.1, btn2_release
+
+        ;mask the button_state and button_rls
+        ;check to see what has changed and depending on what
+        ;changed either jmp to button1 or jmp to button2
 
 button1:mov A, button_state
         cjne A, #02, button2
@@ -99,19 +100,14 @@ main_game:;should we change this to update display?
         mov A, player1
         anl A, player2
         mov P5, A
+
+        mov button_rls, button_state
+
+        
        
 ; Check if game is in a winning state
         jmp main
 
-btn1_release:   mov A, player1
-                rl A
-                mov player1, A
-                jmp main_game
-
-btn2_release:   mov A, player2
-                rr A
-                mov player2, A
-                jmp main_game
    
 ;-------------- Check Buttons Subroutine ----------------
 check_buttons:  MOV A, P1
