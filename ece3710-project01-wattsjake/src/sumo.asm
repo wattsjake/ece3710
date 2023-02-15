@@ -41,9 +41,8 @@ clrall: mov     @r0,#0
         cseg 
 init:   mov A, P2 ;DIP switches 
         anl A, #7 ;use only the first three (3) switches
-        dec A
         mov sumo1, A 
-        dec A
+        inc A
         mov sumo2, A
 
         mov A, sumo1
@@ -52,15 +51,16 @@ init:   mov A, P2 ;DIP switches
         mov player1, A
         
         mov A, sumo2
-        dec A
         mov dptr, #init_table
         movc A, @A+dptr
         mov player2, A
 
         ;and player1, player2
-        mov A, #player1
-        anl A, #player2
+        mov A, player1
+        anl A, player2
         mov P5, A
+
+			  jmp init
 
 ;-------------- Main Game Code --------------------------   
 main:   call delay
