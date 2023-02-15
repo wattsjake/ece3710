@@ -15,7 +15,7 @@
 ;20230209       Jacob W.    added clear RAM
 ;20230209       Jacob W.    add Jack F. to author
 ;20230209       Jacob W.    added sumo1 & 2
-;********************************************************
+;************************************************************
 $include (c8051f020.inc) 
         mov wdtcn,#0DEh ; disable watchdog 
         mov wdtcn,#0ADh 
@@ -31,7 +31,10 @@ clrall: mov     @r0,#0
         DSEG AT 30H
 sumo1: 	 ds 1
 sumo2: 	 ds 1
+last_button: ds 1
 
+
+;-------------- Initialization Code ---------------------
         cseg
         mov A, P2 ;DIP switches 
         anl A, #7 ;use only the first three (3) switches
@@ -39,8 +42,23 @@ sumo2: 	 ds 1
         inc A
         mov sumo2, A
 
+;-------------- Main Game Code --------------------------   
+
+        
 
 
+
+
+
+;-------------- Check Buttons Subroutine ----------------
+
+
+
+
+;------------- Update LEDs Subroutine -------------------
+
+
+;------------- Randoom Delay Subroutine -----------------
 loop:   jmp loop
         END
 
