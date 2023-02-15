@@ -15,6 +15,7 @@
 ;20230209       Jacob W.    added clear RAM
 ;20230209       Jacob W.    add Jack F. to author
 ;20230209       Jacob W.    added sumo1 & 2
+;20230214       Jacob W.    added 1000ms delay                 
 ;************************************************************
 $include (c8051f020.inc) 
 
