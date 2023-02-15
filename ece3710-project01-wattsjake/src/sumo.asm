@@ -9,14 +9,15 @@
 ;Author:        Jacob Watts & Jack Fernald
 ;Organization:  Weber State University ECE 3710
 ;Revision History
-;Date[YYYYMMDD] Author      Description
-;----           ------      -----------
-;20230207       Jacob W.    initial commit
-;20230209       Jacob W.    added clear RAM
-;20230209       Jacob W.    add Jack F. to author
-;20230209       Jacob W.    added sumo1 & 2
-;20230214       Jacob W.    added 1000ms delay                 
+;Date[YYYYMMDD] Author          Description
+;----           ------          -----------
+;20230207       Jacob W.        initial commit
+;20230209       Jacob W.        added clear RAM
+;20230209       Jacob W.        add Jack F. to author
+;20230209       Jacob W.        added sumo1 & 2
+;20230214       Jacob W.        added 1000ms delay                
 ;************************************************************
+        added                   
 $include (c8051f020.inc) 
 
         DSEG AT 30H
