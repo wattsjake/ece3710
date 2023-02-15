@@ -75,26 +75,23 @@ init:   mov A, P2 ;DIP switches
 main:   call delay
         call check_buttons 
 
-        cjne button_state, #something, button2
+button1:cjne button_state, #something, button2
         mov A, player1
         rr A
         mov player1, A
 
-button2:cjne button_state, #something, fast_forward
+button2:cjne button_state, #something, main_game
         mov A, player2
         rr A
         mov player2, A
 
+main_game:         
         mov A, player1
         anl A, player2
         mov P5, A
-
-
-fast_forward: 
+       
+; Check if game is in a winning state
         
-
-
-        cjne A, #01, check_btn2
 
         jmp main
         
@@ -105,7 +102,14 @@ check_buttons:  MOV A, P1
                 XRL A, last_button
                 ANL A, last_button
                 mov button_state, A
+check1          cjne A, #01h, check2
                 RET
+check2          cjne A, #02h, check3
+                RET
+check3          cjne A, #03h, check_buttons
+                RET
+                
+             
 
 check_btn2:     CJNE A, #02, main
                 mov R4, sumo2
