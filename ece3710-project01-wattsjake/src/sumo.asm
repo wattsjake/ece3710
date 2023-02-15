@@ -78,6 +78,7 @@ init:   mov A, P2 ;DIP switches
 ;-------------- Main Game Code --------------------------   
 main:   call delay
         call check_buttons
+        ;trying to work on button release
         call delay
         jb P1.0, btn1_release
         jb P1.1, btn2_release
@@ -102,15 +103,15 @@ main_game:;should we change this to update display?
 ; Check if game is in a winning state
         jmp main
 
-; btn1_release:   mov A, player1
-;                 rl A
-;                 mov player1, A
-;                 jmp main_game
+btn1_release:   mov A, player1
+                rl A
+                mov player1, A
+                jmp main_game
 
-; btn2_release:   mov A, player2
-;                 rr A
-;                 mov player2, A
-;                 jmp main_game
+btn2_release:   mov A, player2
+                rr A
+                mov player2, A
+                jmp main_game
    
 ;-------------- Check Buttons Subroutine ----------------
 check_buttons:  MOV A, P1
