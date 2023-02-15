@@ -75,12 +75,12 @@ init:   mov A, P2 ;DIP switches
 main:   call delay
         call check_buttons 
 
-        cjne button_state, #something
+        cjne button_state, #something, button2
         mov A, player1
         rr A
         mov player1, A
 
-        cjne button_state, #something
+button2:cjne button_state, #something, fast_forward
         mov A, player2
         rr A
         mov player2, A
