@@ -25,6 +25,7 @@ player1:        ds 1
 player2:        ds 1
 last_button:    ds 1
 button_state:   ds 1
+rand_int:       ds 1
         
         CSEG
         mov wdtcn,#0DEh ; disable watchdog 
@@ -60,11 +61,13 @@ init:   mov A, P2 ;DIP switches
         anl A, player2
         mov P5, A
 
-        mov A, player1
-        rr A
+        call delay_1000ms;1s delay for start of game
+
+        mov A, player1;split the players apart
+        rr A ;rotate right 
         mov player1, A
         mov A, player2
-        rl A
+        rl A ;rotate left
         mov player2, A
 
         mov A, player1
@@ -73,30 +76,41 @@ init:   mov A, P2 ;DIP switches
 
 ;-------------- Main Game Code --------------------------   
 main:   call delay
-        call check_buttons 
+        call check_buttons
+        call delay
+        jb P1.0, btn1_release
+        jb P1.1, btn2_release
 
 button1:mov A, button_state
-        cjne A, #01, button2
+        cjne A, #02, button2
         mov A, player1
-        rr A
+        rl A
         mov player1, A
 
 button2:mov A, button_state
-        cjne A, #02, main_game
+        cjne A, #01, main_game
         mov A, player2
         rr A
         mov player2, A
 
-main_game:         
+main_game:;should we change this to update display?     
         mov A, player1
         anl A, player2
         mov P5, A
        
 ; Check if game is in a winning state
-        
-
         jmp main
-        
+
+; btn1_release:   mov A, player1
+;                 rl A
+;                 mov player1, A
+;                 jmp main_game
+
+; btn2_release:   mov A, player2
+;                 rr A
+;                 mov player2, A
+;                 jmp main_game
+   
 ;-------------- Check Buttons Subroutine ----------------
 check_buttons:  MOV A, P1
                 CPL A
@@ -111,8 +125,6 @@ check2:         cjne A, #02h, check3
 check3:         cjne A, #03h, check_buttons
                 RET
                 
-             
-
 check_btn2:     CJNE A, #02, main
                 mov R4, sumo2
                 mov P5, R4
@@ -120,19 +132,35 @@ check_btn2:     CJNE A, #02, main
 ;------------- Update LEDs Subroutine -------------------
 ; Reference Main
 
-;------------- Randoom Delay Subroutine -----------------
-
 ;------------- Look Up Table ----------------------------
 ; The follow table consists of: 11111110, 11111101, 11111011, 11110111, 11101111, 11011111, 10111111, 01111111
 init_table: DB 0FEh, 0FDh, 0FBh, 0F7h, 0EFh, 0DFh, 0BFh, 07Fh
 
-;--------------------- Delay ----------------------------
-delay:		MOV R4, #50 ;about 17.20ms
-here1:		MOV R3, #250			
-here2:		DJNZ R3, here2
-            DJNZ R4, here1
-            RET
+ext_table: DB 0FFh
 
+;------------- Randoom Delay Subroutine ------------------
+delay:
+        djnz R7,carry_on 
+        mov R7,#50 
+carry_on:
+        MOV R4, #50 ;about 17.20 ms
+here1:	MOV R3, #250			
+here2:	DJNZ R3, here2
+        DJNZ R4, here1
+        RET
+
+;-------------------- 1000ms Delay -----------------------
+delay_1000ms:
+        mov R5, #20 ; about 1000ms
+here5:  djnz R5, delay_50ms
+        RET
+
+delay_50ms:
+        mov R4, #150 ;about 51.60 ms
+here3:  mov R3, #250
+here4:  djnz R3, here4
+        djnz R4, here3
+        jmp here5
 
 
 loop1:  jmp loop1
