@@ -16,7 +16,7 @@
 ;20230209       Jacob W.        add Jack F. to author
 ;20230209       Jacob W.        added sumo1 & 2
 ;20230214       Jacob W.        added 1000ms delay                
-;************************************************************                 
+;********************************************************                
 $include (c8051f020.inc) 
 
         DSEG AT 30H
@@ -26,8 +26,9 @@ player1:        ds 1
 player2:        ds 1
 last_button:    ds 1;used inside checkbuttons
 button_state:   ds 1
-button_rls:    ds 1;used to check button release
+button_rls:     ds 1;used to check button release
 rand_int:       ds 1
+
         
         CSEG
         mov wdtcn,#0DEh ; disable watchdog 
@@ -80,23 +81,59 @@ init:   mov A, P2 ;DIP switches
 main:   call delay
         call check_buttons
 
+        mov A, button_rls
+
+        cjne A, button_state, cmp_pl1
+        jmp main
+
+
+
+
+
+cmp_pl1:mov A, button_state
+        cjne A, #01h, cmp_pl2
+        mov R1, A
+roll_p1:mov A, player1;split the players apart
+        rl A ;rotate right 
+        mov player1, A
+        jmp disp_upt
+
+cmp_pl2:mov A, button_state
+        cjne A, #02h, cmp_if0
+        mov R1, A
+roll_p2:mov A, player2
+        rr A ;rotate left
+        mov player2, A
+        jmp disp_upt 
+
+cmp_if0:cjne A, #0h, main ;if A is not 0 something broke?
+        mov A, R1
+        cjne A, #01h, cmp_sb1
+        jmp roll_p1
+                
+
+cmp_sb1:mov A, R1
+        cjne A, #02h, main
+        jmp roll_p2
+        
+
         ;mask the button_state and button_rls
         ;check to see what has changed and depending on what
         ;changed either jmp to button1 or jmp to button2
 
-button1:mov A, button_state
-        cjne A, #02, button2
-        mov A, player1
-        rl A
-        mov player1, A
+;button1:mov A, button_state
+        ;cjne A, #02, button2
+        ;mov A, player1
+        ;rl A
+        ;mov player1, A
 
-button2:mov A, button_state
-        cjne A, #01, main_game
-        mov A, player2
-        rr A
-        mov player2, A
+;button2:mov A, button_state
+        ;cjne A, #01, main_game
+        ;mov A, player2
+        ;rr A
+        ;mov player2, A
 
-main_game:;should we change this to update display?     
+disp_upt:;should we change this to update display?     
         mov A, player1
         anl A, player2
         mov P5, A
@@ -120,7 +157,7 @@ check1:         cjne A, #01h, check2
                 RET
 check2:         cjne A, #02h, check3
                 RET
-check3:         cjne A, #03h, check_buttons
+check3:         ;cjne A, #03h, check_buttons
                 RET
                 
 check_btn2:     CJNE A, #02, main
