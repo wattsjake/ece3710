@@ -26,7 +26,7 @@ player1:        ds 1
 player2:        ds 1
 last_button:    ds 1;used inside checkbuttons
 current_button: ds 1
-button_rls:     ds 1;used to check button release
+button_store:   ds 1
 rand_int:       ds 1
 
         
@@ -79,24 +79,8 @@ init:   mov A, P2 ;DIP switches
 
 ;-------------- Main Game Code --------------------------   
 main:   call delay
-        call check_buttons
+        jmp check_buttons
         
-        mov A, current_button
-roll_p1:cjne A, #01h, roll_p2 
-        mov A, player1
-        rl A
-        mov player1, A
-        jmp disp_upt
-
-roll_p2:cjne A, #02h, main
-        mov A, player2
-        rr A
-        mov player2, A
-        jmp disp_upt
-
-        
-
-
 
 disp_upt:;should we change this to update display?     
         mov A, player1
@@ -104,15 +88,61 @@ disp_upt:;should we change this to update display?
         mov P5, A 
        
 ; Check if game is in a winning state
+        mov last_button, button_store
         jmp main
 
    
 ;-------------- Check Buttons Subroutine ----------------
 check_buttons:  MOV A, P1
-                CPL A
-                ANL A, #03h
-                mov current_button, A
-                ret
+                cpl A
+                anl A, #03h
+                mov button_store, A
+                xrl A, last_button
+
+                
+cp0:            cjne A, #00h, cp1
+                jmp main
+
+cp1:            cjne A, #01h, cp2
+                call roll_p1
+                jmp disp_upt
+
+cp2:            cjne A, #02h, cp3
+                call roll_p2
+                jmp disp_upt
+
+cp3:            mov  A, last_button  
+                cjne A, #03h, scp1
+                jmp main
+                
+scp1:           cjne A, #02h, scp2
+                call roll_p2
+                jmp disp_upt
+
+scp2:           cjne A, #01h, scp3
+                call roll_p1
+                jmp disp_upt
+
+scp3:           call roll_p1               
+                call roll_p2
+                jmp disp_upt
+
+
+                RET
+;------------- Roll P1 Sub ------------------------------
+roll_p1:cjne A, #01h, roll_p2 
+        mov A, player1
+        rl A
+        mov player1, A
+        ret
+
+
+;------------- Roll P2 Sub ------------------------------
+roll_p2:cjne A, #02h, main
+        mov A, player2
+        rr A
+        mov player2, A
+        ret
 
 ;------------- Update LEDs Subroutine -------------------
 ; Reference Main
