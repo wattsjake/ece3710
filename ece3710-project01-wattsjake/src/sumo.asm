@@ -25,7 +25,7 @@ sumo2: 	        ds 1
 player1:        ds 1
 player2:        ds 1
 last_button:    ds 1;used inside checkbuttons
-button_state:   ds 1
+current_button: ds 1
 button_rls:     ds 1;used to check button release
 rand_int:       ds 1
 
@@ -83,14 +83,10 @@ main:   call delay
 
         mov A, button_rls
 
-        cjne A, button_state, cmp_pl1
+        cjne A, current_button, cmp_pl1
         jmp main
 
-
-
-
-
-cmp_pl1:mov A, button_state
+cmp_pl1:mov A, current_button
         cjne A, #01h, cmp_pl2
         mov R1, A
 roll_p1:mov A, player1;split the players apart
@@ -98,7 +94,7 @@ roll_p1:mov A, player1;split the players apart
         mov player1, A
         jmp disp_upt
 
-cmp_pl2:mov A, button_state
+cmp_pl2:mov A, current_button
         cjne A, #02h, cmp_if0
         mov R1, A
 roll_p2:mov A, player2
@@ -117,28 +113,12 @@ cmp_sb1:mov A, R1
         jmp roll_p2
         
 
-        ;mask the button_state and button_rls
-        ;check to see what has changed and depending on what
-        ;changed either jmp to button1 or jmp to button2
-
-;button1:mov A, button_state
-        ;cjne A, #02, button2
-        ;mov A, player1
-        ;rl A
-        ;mov player1, A
-
-;button2:mov A, button_state
-        ;cjne A, #01, main_game
-        ;mov A, player2
-        ;rr A
-        ;mov player2, A
-
 disp_upt:;should we change this to update display?     
         mov A, player1
         anl A, player2
         mov P5, A
 
-        mov button_rls, button_state
+        mov button_rls, current_button
 
         
        
@@ -152,7 +132,7 @@ check_buttons:  MOV A, P1
                 XCH A, last_button
                 XRL A, last_button
                 ANL A, last_button
-                mov button_state, A
+                mov current_button, A
 check1:         cjne A, #01h, check2
                 RET
 check2:         cjne A, #02h, check3
