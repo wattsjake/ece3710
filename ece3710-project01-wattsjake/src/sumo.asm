@@ -80,47 +80,28 @@ init:   mov A, P2 ;DIP switches
 ;-------------- Main Game Code --------------------------   
 main:   call delay
         call check_buttons
-
-        mov A, button_rls
-
-        cjne A, current_button, cmp_pl1
-        jmp main
-
-cmp_pl1:mov A, current_button
-        cjne A, #01h, cmp_pl2
-        mov R1, A
-roll_p1:mov A, player1;split the players apart
-        rl A ;rotate right 
+        
+        mov A, current_button
+roll_p1:cjne A, #01h, roll_p2 
+        mov A, player1
+        rl A
         mov player1, A
         jmp disp_upt
 
-cmp_pl2:mov A, current_button
-        cjne A, #02h, cmp_if0
-        mov R1, A
-roll_p2:mov A, player2
-        rr A ;rotate left
+roll_p2:cjne A, #02h, main
+        mov A, player2
+        rr A
         mov player2, A
-        jmp disp_upt 
+        jmp disp_upt
 
-cmp_if0:cjne A, #0h, main ;if A is not 0 something broke?
-        mov A, R1
-        cjne A, #01h, cmp_sb1
-        jmp roll_p1
-                
-
-cmp_sb1:mov A, R1
-        cjne A, #02h, main
-        jmp roll_p2
         
+
+
 
 disp_upt:;should we change this to update display?     
         mov A, player1
         anl A, player2
-        mov P5, A
-
-        mov button_rls, current_button
-
-        
+        mov P5, A 
        
 ; Check if game is in a winning state
         jmp main
@@ -129,21 +110,10 @@ disp_upt:;should we change this to update display?
 ;-------------- Check Buttons Subroutine ----------------
 check_buttons:  MOV A, P1
                 CPL A
-                XCH A, last_button
-                XRL A, last_button
-                ANL A, last_button
+                ANL A, #03h
                 mov current_button, A
-check1:         cjne A, #01h, check2
-                RET
-check2:         cjne A, #02h, check3
-                RET
-check3:         ;cjne A, #03h, check_buttons
-                RET
-                
-check_btn2:     CJNE A, #02, main
-                mov R4, sumo2
-                mov P5, R4
-                jmp main
+                ret
+
 ;------------- Update LEDs Subroutine -------------------
 ; Reference Main
 
