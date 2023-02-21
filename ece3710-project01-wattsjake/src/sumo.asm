@@ -17,7 +17,9 @@
 ;20230209       Jacob W.        added sumo1 & 2
 ;20230214       Jacob W.        added 1000ms delay
 ;20230218       Jacob W.        fixed split on edges 
-;20230220       Jacob W.        added winner check               
+;20230220       Jacob W.        added winner check    
+;20230220       Jack F.         Nuked my version of the 
+;                               code.            
 ;********************************************************                
 $include (c8051f020.inc)
 ;------------------------ TODO --------------------------
