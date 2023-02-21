@@ -7,7 +7,7 @@
 ;Revision History
 ;Date[YYYYMMDD] Author          Description
 ;----           ------          -----------
-;20230221       Jacob W.        initial commit           
+;20230221       Jacob W.        initial commit     
 ;********************************************************                
 $include (c8051f020.inc)
 ;------------------------ TODO --------------------------

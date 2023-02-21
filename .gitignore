@@ -1,7 +1,7 @@
 #Silicon Labs IDE
 *.OBJ
 *.LST
-*.wsp
+
 *.M51
 *.out
 *cyglink.txt
