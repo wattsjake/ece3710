@@ -34,12 +34,12 @@ check_btn2:    CJNE A, #02,  start
                DEC game_state
 							 JMP start
 
-check_buttons: MOV A, P1
-							 CPL A
-							 XCH A, last_button
-							 XRL A, last_button
-							 ANL A, last_button
-							 RET
+check_buttons: 	MOV A, P1
+				CPL A
+				XCH A, last_button
+				XRL A, last_button
+				ANL A, last_button
+				RET
 
 P1_table:      DB 0FCh, 0F9h, 0F3h, 0E7h, 0CFh, 09Fh, 03Fh, 07Fh, 0FFh ; 0 1 2 3 4 5 6 7
 P2_table:      DB 0FEh, 0FCh ; 8 9
