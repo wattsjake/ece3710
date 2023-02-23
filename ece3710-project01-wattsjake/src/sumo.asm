@@ -20,7 +20,9 @@
 ;20230220       Jacob W.        added winner check    
 ;20230220       Jack F.         Nuked my version of the 
 ;                               code. 
-;20230222       Jacob W.        added random delay           
+;20230222       Jacob W.        added random delay 
+;20230222       Jacob W.        clr A, and clr C after 
+;                               random subroutine          
 ;********************************************************                
 $include (c8051f020.inc)
 ;------------------------ TODO --------------------------
@@ -272,12 +274,14 @@ init_table: DB 0FEh, 0FDh, 0FBh, 0F7h, 0EFh, 0DFh, 0BFh, 07Fh
 
 ext_table: DB 0FFh 
 
-;------------- Randoom Delay Subroutine ------------------
+;------------- Random Delay Subroutine -------------------
 delay_random:
             mov A, rand_int
             add A, #050 ;delay between .5-1 S
 compare:    mov R6, A
             cjne A, #000h, call_delay
+            clr A;just for saftey
+            clr C;just for saftey 
             RET
 
 call_delay: call delay
