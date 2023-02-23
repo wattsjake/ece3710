@@ -25,6 +25,7 @@ cycle:
 	jnb	ri,cycle	; wait for data to arrive
 	clr	ri		; and clear flag for next time
 	mov	a,sbuf0		; get the incoming data...
+    add a, #001h
 	mov	sbuf0,a		; ...and send it back
 	jmp	cycle
 

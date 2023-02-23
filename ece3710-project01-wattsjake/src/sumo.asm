@@ -19,7 +19,8 @@
 ;20230218       Jacob W.        fixed split on edges 
 ;20230220       Jacob W.        added winner check    
 ;20230220       Jack F.         Nuked my version of the 
-;                               code.            
+;                               code. 
+;20230222       Jacob W.        added random delay           
 ;********************************************************                
 $include (c8051f020.inc)
 ;------------------------ TODO --------------------------
@@ -32,7 +33,7 @@ $include (c8051f020.inc)
 ;R3 - delay
 ;R4 - delay
 ;R5 - delay
-;R6 -
+;R6 - rand delay
 ;R7 - rand delay
 ;------------------------ DSEG --------------------------
         DSEG AT 30H
@@ -46,7 +47,7 @@ last_button:    ds 1;used inside checkbuttons
 current_button: ds 1
 button_store:   ds 1
 led_position:   ds 1
-rand_int:       ds 1
+rand_int:       ds 1;do we need this?
 position_count: ds 1
 split_state:    ds 1
 dual_press:     ds 1
@@ -89,17 +90,20 @@ init:   mov A, P2 ;DIP switches
 
         mov A, #000h; set game state false (0)
         mov game_state, A
-
-rand_delay:;enter random delay 
-
+        mov rand_int, A;clear rand_int
+        
         call delay_1000ms;1s delay for start of game
+        jmp split_s; skip the r_delay
 
-        call split
+r_delay:call delay_random
+        
+split_s:call split
 
         call disp_upt
 
 ;-------------- Main Game Code --------------------------   
 main:       call delay
+            mov rand_int, R7
             jmp check_buttons
 disp_call:  call disp_upt
                   
@@ -109,7 +113,7 @@ disp_call:  call disp_upt
             mov A, game_state
             cjne A, #000h, init ;check for game state
             mov A, split_state ;if split state is 1 jmp delay
-            cjne A, #000h, rand_delay
+            cjne A, #000h, r_delay
             jmp main
 
    
@@ -269,6 +273,19 @@ init_table: DB 0FEh, 0FDh, 0FBh, 0F7h, 0EFh, 0DFh, 0BFh, 07Fh
 ext_table: DB 0FFh 
 
 ;------------- Randoom Delay Subroutine ------------------
+delay_random:
+            mov A, rand_int
+            add A, #050 ;delay between .5-1 S
+compare:    mov R6, A
+            cjne A, #000h, call_delay
+            RET
+
+call_delay: call delay
+            dec R6
+            mov A, R6
+            jmp compare
+        
+;----------------- Delay Subroutine ----------------------
 delay:
         djnz R7,carry_on 
         mov R7,#50 
