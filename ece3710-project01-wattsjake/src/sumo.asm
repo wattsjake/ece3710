@@ -22,16 +22,17 @@
 ;                               code. 
 ;20230222       Jacob W.        added random delay 
 ;20230222       Jacob W.        clr A, and clr C after 
-;                               random subroutine          
+;                               random subroutine
+;20230223       Jacob W.        comments on subroutines        
 ;********************************************************                
 $include (c8051f020.inc)
 ;------------------------ TODO --------------------------
-;call random delay
+;NA
 
 ;--------------------- Registery ------------------------
 ;R0 - clr RAM
-;R1 -
-;R2 - 
+;R1 - Not in Use (NU)
+;R2 - NU
 ;R3 - delay
 ;R4 - delay
 ;R5 - delay
