@@ -151,6 +151,10 @@ proceed:
 
    
 ;-------------- Check Buttons Subroutine ----------------
+; Check the state of the buttons and store it in the button_store variable
+; Args: P1, A, button_store
+; Returns: button_store
+; Destroys: A, button_store
 check_buttons:  MOV A, P1
                 cpl A
                 anl A, #03h
@@ -198,6 +202,10 @@ scp3:           call roll_p1
 
 
 ;------------- Roll P1 Sub ------------------------------
+; Rotate the 16-bit storage variable 
+; Args: P1, A, button_store
+; Returns: button_store
+; Destroys: A, button_store
 roll_p1:
         mov A, p1_track_low
         mov B, p1_track_high
