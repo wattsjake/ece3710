@@ -128,7 +128,10 @@ main:
         
         call check_buttons
         call delay
+        call move_players
         call split
+
+
 
         mov A, p_total_track_low
         cjne A, #18h, check_high
@@ -152,8 +155,11 @@ check_buttons:  MOV A, P1
                 cpl A
                 anl A, #03h
                 mov button_store, A
-                xrl A, last_button
+                RET
 
+move_players: 
+                mov A, button_store
+                xrl A, last_button
                 
 cp0:            cjne A, #00h, cp1
                 ret
@@ -170,7 +176,7 @@ cp2:            cjne A, #02h, cp3
 
 cp3:            mov  A, last_button  
                 cjne A, #03h, scp1
-                call main
+                jmp main
                 ret
                 
 scp1:           cjne A, #02h, scp2
@@ -308,16 +314,39 @@ init_table: DB 0FEh, 0FDh, 0FBh, 0F7h, 0EFh, 0DFh, 0BFh, 07Fh
 
 ext_table: DB 0FFh
 
-;------------- Delay Subroutine ------------------
+
+;------------- Random Delay Subroutine -------------------
+delay_random:
+            mov A, rand_int
+            add A, #050 ;delay between .5-1 S
+compare:    mov R2, A
+            cjne A, #000h, call_delay
+            clr A;just for saftey
+            clr C;just for saftey 
+            RET
+
+call_delay: call delay
+            dec R2
+            mov A, R2
+            jmp compare
+        
+;----------------- Delay Subroutine ----------------------
 delay:
         djnz R7,carry_on 
         mov R7,#50 
 carry_on:
+        MOV R4, #50 ;about 17.20 ms
+here1:	MOV R3, #250			
+here2:	DJNZ R3, here2
+        DJNZ R4, here1
+        RET
         
 
 
 ;--------------- Split Routine ------------------
-split:  mov A, led_track
+split:  
+
+        mov A, led_track
         cjne A, #18h, start_check
         call split_actual
         ret
@@ -348,12 +377,33 @@ cs22:  inc R6
 
 
 split_actual:
+
+        mov A, button_store
+        call check_buttons
+        cjne A, #00, split_actual
+
         call roll_p1_split
+        call delay_1000ms
         call roll_p2_split
+        call delay_1000ms
         ret
 
 
 not_next_to_each_return: ret
+
+
+;-------------------- 1000ms Delay -----------------------
+delay_1000ms:
+        mov R5, #20 ; about 1000ms
+here5:  djnz R5, delay_50ms
+        RET
+
+delay_50ms:
+        mov R4, #150 ;about 51.60 ms
+here3:  mov R3, #250
+here4:  djnz R3, here4
+        djnz R4, here3
+        jmp here5
 
 loop1:  jmp loop1
         END
