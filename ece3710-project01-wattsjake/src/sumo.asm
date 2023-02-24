@@ -202,10 +202,10 @@ scp3:           call roll_p1
 
 
 ;------------- Roll P1 Sub ------------------------------
-; Rotate the 16-bit storage variable 
-; Args: P1, A, button_store
-; Returns: button_store
-; Destroys: A, button_store
+; Rotate the 16-bit player 1 storage variable to the right 
+; Args: A, B, p1_track_low, p1_track_high
+; Returns: p1_track_low, p1_track_high
+; Destroys: A, B
 roll_p1:
         mov A, p1_track_low
         mov B, p1_track_high
@@ -219,6 +219,10 @@ roll_p1:
 
 
 ;------------- Roll P2 Sub ------------------------------
+; Rotate the 16-bit player 2 storage variable to the left 
+; Args: A, B, p2_track_low, p2_track_high
+; Returns: p2_track_low, p2_track_high
+; Destroys: A, B
 roll_p2:
         mov A, p2_track_high
         mov B, p2_track_low
@@ -232,6 +236,11 @@ roll_p2:
 
 
 ;------------- Roll P1 Sub for Split ------------------------------
+; Rotate the 16-bit player 1 storage variable to the left. This function
+; is used explicitly for the split subroutine 
+; Args: A, B, p1_track_low, p1_track_high
+; Returns: p1_track_low, p1_track_high
+; Destroys: A, B
 roll_p1_split:
         mov A, p1_track_high
         mov B, p1_track_low
@@ -245,6 +254,11 @@ roll_p1_split:
 
 
 ;------------- Roll P2 Sub for Split ------------------------------
+; Rotate the 16-bit player 2 storage variable to the right. This function
+; is used explicitly for the split subroutine 
+; Args: A, B, p2_track_low, p2_track_high
+; Returns: p2_track_low, p2_track_high
+; Destroys: A, B
 roll_p2_split:
         mov A, p2_track_low
         mov B, p2_track_high
@@ -257,6 +271,10 @@ roll_p2_split:
         ret
 
 ;------------ 16 anding sub ------------------------------
+; This routine ands the p1 and p2 16 bit tracker variables. 
+; Args: A, B, p1_track_low, p1_track_high
+; Returns: p1_track_low, p1_track_high
+; Destroys: A
 big_oring: 
         mov A, p1_track_high
         orl A, p2_track_high
@@ -267,7 +285,12 @@ big_oring:
         ret
 
 ;------------- Update LEDs Subroutine -------------------
-
+; This routine masks the middle 8 bits of the now anded "p_total_track" 16 
+; bit tracker variable with a 0Fh. It then masks out the 5 bits of the 
+; upper and lower tracks for the end LEDs on the board. 
+; Args: A, B, p_total_track_low, p_total_track_high, led_edge_track
+; Returns: P5, P3
+; Destroys: A
 disp_update:
         call big_oring
 ; Middle 8-bits masking
@@ -311,19 +334,20 @@ disp_update:
         
         ret
 
-
-
-
-
-
 ;------------- Look Up Table ----------------------------
+; Look Up Table for LED position
+; Args: na
+; Returns: na
+; Destroys: na
 ; The follow table consists of: 11111110, 11111101, 11111011, 11110111, 11101111, 11011111, 10111111, 01111111
 init_table: DB 0FEh, 0FDh, 0FBh, 0F7h, 0EFh, 0DFh, 0BFh, 07Fh
 
-ext_table: DB 0FFh
-
 
 ;------------- Random Delay Subroutine -------------------
+; Random Delay Subroutine between .5-1.0s
+; Args: rand_int
+; Returns: na
+; Destroys: Acc, Carry, R2
 delay_random:
             mov A, rand_int
             add A, #050 ;delay between .5-1 S
@@ -339,6 +363,10 @@ call_delay: call delay
             jmp compare
         
 ;----------------- Delay Subroutine ----------------------
+; Delay Subroutine about 17.20 ms
+; Args: na
+; Returns: na
+; Destroys: R7, R4, R3
 delay:
         djnz R7,carry_on 
         mov R7,#50 
@@ -352,6 +380,10 @@ here2:	DJNZ R3, here2
 
 
 ;--------------- Split Routine ------------------
+; Splits the two players apart
+; Args: led_track, p_total_track_high, p_total_track_low
+; Returns: na
+; Destroys: Acc, R6
 split:  
 
         mov A, led_track
@@ -401,6 +433,10 @@ not_next_to_each_return: ret
 
 
 ;-------------------- 1000ms Delay -----------------------
+; Create a delay of 1000ms or 1s
+; Args: na
+; Returns: na
+; Destroys: R5, R4, R3
 delay_1000ms:
         mov R5, #20 ; about 1000ms
 here5:  djnz R5, delay_50ms
