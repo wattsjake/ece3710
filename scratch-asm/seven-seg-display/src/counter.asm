@@ -13,7 +13,8 @@
 ;20230207       Jacob W.        initial commit
 ;20230224       Jacob W.        completed test code 
 ;20230224       Jacob W.        copied and pasted code
-;                               from seg-test.asm     
+;                               from seg-test.asm 
+;20230224       Jacob W.        added counter code    
 ;********************************************************                
 $include (c8051f020.inc)
 ;------------------------ TODO --------------------------
