@@ -24,7 +24,7 @@ $include (c8051f020.inc)
 ;------------------------ DSEG --------------------------
         DSEG AT 30H
 last_button:    ds 1
-
+led_position:   ds 1
 
 ;------------------------ CSEG --------------------------       
         CSEG
@@ -73,13 +73,17 @@ main:
 
 serial_check:
         jbc RI1, tx_sub
-        clr A
-        mov P3, A
-        jmp main
+
+        
         
 
 
 ;---------------------- LED Display ---------------------
+update_disp:
+        mov A, led_position
+        mov dptr, #init_table
+        movc A, @A+dptr
+        mov P5, A
 ;------------------------- tx ---------------------------
 tx_sub:
         setb TR1
@@ -102,17 +106,20 @@ msg_test: DB "Hello World",0Dh,0Ah, 0 ;termination is zero (0)
 ;message_table1: DB "It is certain", "You may rely on it", "Without a doubt", "Yes", "Most likely", "Reply hazy, try again", "Concentrate and ask again"  
 ;message_table2: DB "Don't count on it", "Very doubtful", "My reply is no" 
 
+;--------------------- LED table -------------------------
+led_table: DB 0FEh, 0FDh, 0FBh, 0F7h, 0EFh, 0DFh, 0BFh, 07Fh
+
 ;------------- Randoom Delay Subroutine ------------------
 ;TODO
 
 ;------------------- Check Buttons ----------------------
 check_buttons: 	MOV A, P1
-				CPL A
-				XCH A, last_button
-				XRL A, last_button
-				ANL A, last_button
+                CPL A
+                XCH A, last_button
+                XRL A, last_button
+                ANL A, last_button
                 MOV last_button, A
-				RET
+                RET
 
 ;--------------------- 10ms Delay ------------------------
 delay_10ms: djnz R1, here

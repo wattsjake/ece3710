@@ -1,5 +1,5 @@
 ;******************************************************************************
-;*  Course: ECE 3710 Embedded Systems										                      *
+;*  Course: ECE 3710 Embedded Systems										  *
 ;*  Assignment: Lab03                                                         *
 ;*  Author:  Jack Fernald                                                     *
 ;*  Verified: Jacob Watts                                                     *
@@ -15,24 +15,24 @@ $include (c8051f020.inc)
 last_button: 	 ds 1
 game_state: 	 ds 1
 
-							 CSEG
-Main:          CALL Initilize
-start:         MOV R4, #10
-               CALL Delay
-							 MOV A, game_state
-							 CALL LED_driver
-							 MOV A, game_state
-							 jmp END_STATE
+		CSEG
+Main:       	CALL Initilize
+start: 		    MOV R4, #10
+           		CALL Delay
+				MOV A, game_state
+				CALL LED_driver
+				MOV A, game_state
+				jmp END_STATE
 
 							 
-CONT:					 CALL check_buttons
-							 CJNE A, #01, check_btn2
-               INC game_state
-							 jmp start
+CONT:			CALL check_buttons
+				CJNE A, #01, check_btn2
+                INC game_state
+				jmp start
 
-check_btn2:    CJNE A, #02,  start
-               DEC game_state
-							 JMP start
+check_btn2: 	CJNE A, #02,  start
+            	DEC game_state
+				JMP start
 
 check_buttons: 	MOV A, P1
 				CPL A
