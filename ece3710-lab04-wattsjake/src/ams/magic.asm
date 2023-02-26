@@ -67,14 +67,19 @@ main:
         call delay_10ms
         call check_buttons
         mov A, last_button
-        cjne A, #001h, serial_check
+        cjne A, #001h, serial_check ;if button pressed jmp
             jmp tx_sub
 
 serial_check:
         jbc RI1, tx_sub
+        clr A
+        mov P3, A
         jmp main
+        
 
 
+;---------------------- LED Display ---------------------
+;------------------------- tx ---------------------------
 tx_sub:
         setb TR1
         mov DPTR, #msg_test
