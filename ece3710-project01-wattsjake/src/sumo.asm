@@ -17,29 +17,30 @@
 ;20230209       Jacob W.        added sumo1 & 2
 ;20230214       Jacob W.        added 1000ms delay   
 ;20230218       Jack F.         Got game in working cond-
-;                               -ition but glitchy             
+;                               -ition but glitchy
+;20230223       Jacob W.        added comments             
 ;********************************************************                
 $include (c8051f020.inc) 
 
         DSEG AT 30H
-sumo1: 	        ds 1
-sumo2: 	        ds 1
-player1:        ds 1
-player2:        ds 1
-last_button:    ds 1;used inside checkbuttons
-current_button: ds 1
-button_store:   ds 1
-rand_int:       ds 1
-temp1:          ds 1
+sumo1: 	                ds 1
+sumo2: 	                ds 1
+player1:                ds 1
+player2:                ds 1
+last_button:            ds 1;used inside checkbuttons
+current_button:         ds 1
+button_store:           ds 1
+rand_int:               ds 1
+temp1:                  ds 1
 
-p1_track_high:     ds 1
-p1_track_low:     ds 1
-p2_track_high:     ds 1
-p2_track_low:     ds 1
-p_total_track_high: ds 1  
-p_total_track_low: ds 1  
-led_track:    ds 1
-led_edge_track: ds 1
+p1_track_high:          ds 1
+p1_track_low:           ds 1
+p2_track_high:          ds 1
+p2_track_low:           ds 1
+p_total_track_high:     ds 1  
+p_total_track_low:      ds 1  
+led_track:              ds 1
+led_edge_track:         ds 1
 
         
         CSEG
@@ -48,7 +49,7 @@ led_edge_track: ds 1
         mov xbr2,#40h ; enable port output
 
         ;clear all internal ram 
-        mov     r0,#255 
+        mov     r0,#255;used to clear all of the ram #0FFh 
 clrall: mov     @r0,#0
         djnz    r0,clrall
 ;---------------PLACE CODE BELOW THIS LINE---------------
@@ -77,7 +78,7 @@ init:   mov A, P2 ;DIP switches
         mov P5, A
 
         mov	oscxcn,#67H	; turn on external crystal
-      	mov	tmod,#20H		; wait 1ms using T1 mode 2
+      	mov	tmod,#20H	; wait 1ms using T1 mode 2
       	mov	th1,#256-167	; 2MHz clock, 167 counts = 1ms
       	setb	tr1
 wait1:
@@ -90,21 +91,21 @@ wait2:
       	mov	oscicn,#8		; engage! Now using 22.1184MHz
 
 
-        mov p1_track_high, #00h
-        mov p1_track_low, #00h
-        mov p2_track_high, #00h
-        mov p2_track_low, #00h
-        mov p_total_track_high, #00h  
-        mov p_total_track_low, #00h
-        mov led_track, #00h
-        mov led_edge_track, #00h
-        mov last_button, #00h
-        mov current_button, #00h
-        mov button_store, #00h
-        mov p1_track_high, #00h
-        mov p2_track_high, #01h
-        mov p2_track_low, #00h
-        mov p1_track_low, #80h
+        mov p1_track_high,      #00h; use #00h to initalize values
+        mov p1_track_low,       #00h;   "                        "
+        mov p2_track_high,      #00h;   "                        "
+        mov p2_track_low,       #00h;   "                        "
+        mov p_total_track_high, #00h;   "                        "  
+        mov p_total_track_low,  #00h;   "                        "
+        mov led_track,          #00h;   "                        "
+        mov led_edge_track,     #00h;   "                        "
+        mov last_button,        #00h;   "                        "
+        mov current_button,     #00h;   "                        "
+        mov button_store,       #00h;   "                        "
+        mov p1_track_high,      #00h;   "                        "
+        mov p2_track_high,      #01h; initalized to high
+        mov p2_track_low,       #00h; initalize to low
+        mov p1_track_low,       #80h; used to put p1_track_low next to p2_track_low
   
         call disp_update
 
@@ -117,29 +118,21 @@ wait2:
         rl A ;rotate left
         mov player2, A
 
-        
-
-
-        
-
 ;-------------- Main Game Code --------------------------   
 main:   
-        
         
         call check_buttons
         call delay
         call move_players
         call split
 
-
-
         mov A, p_total_track_low
-        cjne A, #18h, check_high
+        cjne A, #18h, check_high;       #0001 0010B check for winning state
         jmp init
         
 check_high:
         mov A, p_total_track_high
-        cjne A, #18h, proceed
+        cjne A, #18h, proceed;          #0001 0010B check for winning state
         jmp init
 
 proceed:
@@ -157,7 +150,7 @@ proceed:
 ; Destroys: A, button_store
 check_buttons:  MOV A, P1
                 cpl A
-                anl A, #03h
+                anl A, #03h; only look at the LSB of 3 bits
                 mov button_store, A
                 RET
 
@@ -165,30 +158,30 @@ move_players:
                 mov A, button_store
                 xrl A, last_button
                 
-cp0:            cjne A, #00h, cp1
+cp0:            cjne A, #00h, cp1; if no button pressed return 
                 ret
 
-cp1:            cjne A, #01h, cp2
+cp1:            cjne A, #01h, cp2; if player 1 pressed roll player1
                 call roll_p1
                 call disp_update
                 ret
 
-cp2:            cjne A, #02h, cp3
+cp2:            cjne A, #02h, cp3; if player 2 pressed roll player2
                 call roll_p2
                 call disp_update
                 ret
 
 cp3:            mov  A, last_button  
-                cjne A, #03h, scp1
+                cjne A, #03h, scp1; if both press jump to subcheck
                 jmp main
                 ret
                 
-scp1:           cjne A, #02h, scp2
+scp1:           cjne A, #02h, scp2; check to see if player 2 releases first
                 call roll_p2
                 call disp_update
                 ret
 
-scp2:           cjne A, #01h, scp3
+scp2:           cjne A, #01h, scp3; check to see if player 1 releases first
                 call roll_p1
                 call disp_update
                 ret
@@ -295,14 +288,14 @@ disp_update:
         call big_oring
 ; Middle 8-bits masking
         mov A, p_total_track_high
-        anl A, #0Fh
+        anl A, #0Fh ; Making out the lower bits of p_total_track_high to put on LEDs
         rl A
         rl A
         rl A
         rl A
         mov led_track, A
         mov A, p_total_track_low
-        anl A, #11110000b
+        anl A, #11110000b; Masking out the upper bits of p_total_track_high to put on LEDs
         rr A
         rr A
         rr A
@@ -312,13 +305,13 @@ disp_update:
 
 ; Edge masking
         mov A, p_total_track_high
-        anl A, #10h
+        anl A, #10h ; Making out a single bit(4) of p_total_track_high to put on edge LEDs(10)
         rr A
         rr A
         rr A
         mov led_edge_track, A
         mov A, p_total_track_low
-        anl A, #08h
+        anl A, #08h ; Making out a single bit(3) of p_total_track_high to put on edge LEDs(1)
         rr A
         rr A
         rr A
@@ -352,7 +345,7 @@ delay_random:
             mov A, rand_int
             add A, #050 ;delay between .5-1 S
 compare:    mov R2, A
-            cjne A, #000h, call_delay
+            cjne A, #000h, call_delay ; if accumulator is 0 continue
             clr A;just for saftey
             clr C;just for saftey 
             RET
@@ -377,27 +370,25 @@ here2:	DJNZ R3, here2
         DJNZ R4, here1
         RET
         
-
-
 ;--------------- Split Routine ------------------
 ; Splits the two players apart
-; Args: led_track, p_total_track_high, p_total_track_low
+; Args: led_track, p_total_track_high, p_total_track_low, button_store
 ; Returns: na
 ; Destroys: Acc, R6
 split:  
 
         mov A, led_track
-        cjne A, #18h, start_check
+        cjne A, #18h, start_check ; If they are next to each other start checking or perform spliting
         call split_actual
         ret
 
 start_check:        
         mov R6, #00h
         mov A, p_total_track_high
-css1:   cjne A, #03h, cs1
+css1:   cjne A, #03h, cs1 ; This rolls the register right three times to see if the bits add to three, if so call split
         jmp split_actual
 cs1:
-        cjne R6, #03h, cs11
+        cjne R6, #03h, cs11 ; This does the same thing as above but keeps checking 
         jmp part2
 cs11:  inc R6     
         rr A
@@ -406,10 +397,12 @@ cs11:  inc R6
 
 part2:  mov R6, #00h
         mov A, p_total_track_low
-css2:   cjne A, #03h, cs2
+css2:   cjne A, #03h, cs2 ; This is just a counter for rotating the A until the end to see if the bits add to 3
+                          ; This signifies that the LEDs are next to each other.
         jmp split_actual
 cs2:
-        cjne R6, #07h, cs22
+        cjne R6, #07h, cs22 ; This is just a counter for rotating the A until the end to see if the bits add to 3
+                            ; This signifies that the LEDs are next to each other.
         jmp not_next_to_each_return
 cs22:  inc R6     
         rr A
@@ -420,7 +413,8 @@ split_actual:
 
         mov A, button_store
         call check_buttons
-        cjne A, #00, split_actual
+        cjne A, #00, split_actual ; Checking against 0 for jumping. This prevents LED updating from happening
+                                  ; unitl both players have released their buttons
 
         call roll_p1_split
         call delay_1000ms
@@ -444,7 +438,7 @@ here5:  djnz R5, delay_50ms
 
 delay_50ms:
         mov R4, #150 ;about 51.60 ms
-here3:  mov R3, #250
+here3:  mov R3, #250 ;250 for the delay count
 here4:  djnz R3, here4
         djnz R4, here3
         jmp here5
