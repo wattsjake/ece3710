@@ -13,14 +13,14 @@ $include (c8051f020.inc)
 ;------------------------ TODO --------------------------
 
 ;--------------------- Registery ------------------------
-;R0 - clr RAM
-;R1 -
+;R0 - clr RAM but only in the beginning
+;R1 - Counter for 10 
 ;R2 - 
-;R3 - delay
-;R4 - delay
-;R5 - delay
+;R3 - 
+;R4 - 
+;R5 - 
 ;R6 -
-;R7 - rand delay
+;R7 - 
 ;------------------------ DSEG --------------------------
         DSEG AT 30H
 last_button:    ds 1
@@ -28,6 +28,7 @@ last_button:    ds 1
 
 ;------------------------ CSEG --------------------------       
         CSEG
+;------- Crystal Setup Code -----------------------------        
         mov wdtcn,#0DEh ; disable watchdog 
         mov wdtcn,#0ADh 
         mov xbr2,#40h ; enable port output
@@ -114,7 +115,9 @@ check_buttons: 	MOV A, P1
 				RET
 
 ;--------------------- 10ms Delay ------------------------
-delay_10ms: 
+delay_10ms: djnz R1, here
+            mov R1, #10
+            
 here:       mov TL0, #000h ;-9216 for 5ms
             mov TH0, #0DCh
             setb TR0 ;start timer
