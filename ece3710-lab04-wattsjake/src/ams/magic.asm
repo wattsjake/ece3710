@@ -23,6 +23,7 @@ $include (c8051f020.inc)
 ;R7 - 
 ;------------------------ DSEG --------------------------
         DSEG AT 30H
+current_button: ds 1
 last_button:    ds 1
 led_position:   ds 1
 
@@ -62,30 +63,37 @@ init:
         mov P3, A
         mov P5, A
         RI1 bit 0C0h ;turn on flag for serial send
+        mov R1, #10
 
 ;--------------------- Main Code ------------------------
 main:
         call delay_10ms
+        mov A, R1
+        mov led_position, A
         call check_buttons
-        mov A, last_button
-        cjne A, #001h, serial_check ;if button pressed jmp
+        mov A, current_button
+        cjne A, last_button, cont
+            jmp main
+            
+cont:   cjne A, #001h, serial_check ;if button pressed jmp
             jmp tx_sub
 
 serial_check:
         jbc RI1, tx_sub
-
-        
-        
-
+        jmp main
 
 ;---------------------- LED Display ---------------------
 update_disp:
         mov A, led_position
-        mov dptr, #init_table
+        mov dptr, #led_table
         movc A, @A+dptr
         mov P5, A
+        clr A
+        clr C
+        ret
 ;------------------------- tx ---------------------------
 tx_sub:
+        call update_disp
         setb TR1
         mov DPTR, #msg_test
 fn:     clr A
@@ -114,16 +122,19 @@ led_table: DB 0FEh, 0FDh, 0FBh, 0F7h, 0EFh, 0DFh, 0BFh, 07Fh
 
 ;------------------- Check Buttons ----------------------
 check_buttons: 	MOV A, P1
+                MOV last_button, current_button
                 CPL A
-                XCH A, last_button
-                XRL A, last_button
-                ANL A, last_button
-                MOV last_button, A
+                XCH A, current_button
+                XRL A, current_button
+                ANL A, current_button
+                
+                MOV current_button, A
                 RET
 
 ;--------------------- 10ms Delay ------------------------
-delay_10ms: djnz R1, here
-            mov R1, #10
+delay_10ms:
+            djnz R1,here
+            mov R1,#10 
             
 here:       mov TL0, #000h ;-9216 for 5ms
             mov TH0, #0DCh
