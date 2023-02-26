@@ -129,11 +129,11 @@ check_buttons:  MOV A, P1
 
                 ;there's a bug when last_button is #03h
                 cjne A, #03h, cp0 ;used to see if dual press
-                    mov A, #001h
-                    mov dual_press, A ;set dual_press to true
-                    mov A, #000h
-                    mov last_button, A
-                    jmp main
+                mov A, #001h
+                mov dual_press, A ;set dual_press to true
+                mov A, #000h
+                mov last_button, A
+                jmp main
               
 cp0:            cjne A, #00h, cp1
                 jmp main
