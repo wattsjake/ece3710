@@ -70,7 +70,7 @@ main:
         mov A, last_button
         cjne A, #001h, serial_check ;if button pressed jmp
             jmp tx_sub
-
+; ----- This is where we check for 
 serial_check:
         jbc RI1, tx_sub
 
@@ -103,7 +103,7 @@ here1:  jnb TI, here1
 ;-------------------- message table ----------------------
 msg_test: DB "Hello World",0Dh,0Ah, 0 ;termination is zero (0)
   
-;message_table1: DB "It is certain", "You may rely on it", "Without a doubt", "Yes", "Most likely", "Reply hazy, try again", "Concentrate and ask again"  
+;message_table1: DB "It is certain", "You may rely on it", "Without a doubt", "Most likely", "Reply hazy, try again", "Concentrate and ask again"  
 ;message_table2: DB "Don't count on it", "Very doubtful", "My reply is no" 
 
 ;--------------------- LED table -------------------------
