@@ -76,7 +76,7 @@ main:
             
 cont:   cjne A, #001h, serial_check ;if button pressed jmp
             jmp tx_sub
-
+; ----- This is where we check for 
 serial_check:
         jnb ri, main ;jump to main if ri not set
         clr ri
