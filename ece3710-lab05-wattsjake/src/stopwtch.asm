@@ -46,7 +46,7 @@ count:          ds 1
     	setb tr1
         jmp wait1
 
-;--------------------ISR for Serial ---------------------
+;----------------- ISR for Serial Com--------------------
         ORG 23h
         reti
 
@@ -54,9 +54,34 @@ count:          ds 1
         ORG 2Bh
         clr tf2
         call check_buttons
+        mov A, current_button
+toggle_time:
+        cjne A, #001h, reset_time
+            cpl sw_flag
+reset_time:
+        cjne A, #002h, return
+            clr A
+            mov sw_time, A
+sw_running:
+        jb sw_flag, update_timer
+            jmp return 
+        
+update_timer:
+        mov A, count
+        djnz A, inc_time
+            jmp return
+        
+inc_time:
+        mov A, sw_time
+        inc A
+        mov sw_time, A
+        mov A, #10
+        mov count, A
+        jmp return            
 
-        reti
-
+return:
+        reti ;if both buttons pressed reti 
+                             
 wait1:
     	jnb	tf1,wait1
     	clr	tr1		; 1ms has elapsed, stop timer
