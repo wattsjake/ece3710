@@ -43,7 +43,7 @@ wait2:
 
         mov	scon0,#50H	; 8-bit, variable baud, receive enable
 	    mov	th1,#-6		; 9600 baud
-	    setb	tr1		; start baud clock
+	    setb tr1		; start baud clock
 
         ;clear all internal ram
         mov     r0,#255 
@@ -65,14 +65,35 @@ clrall: mov     @r0,#0
 
 ;--------------------- Main Code ------------------------
 main:
+        ;set up a timer for counting to 0.0-9.9
+        mov tmod, #20h
+        mov th1, #0FDh
+        mov scon, #50h
+        mov IE, #10010000B
+        setb tr1
 
+t_loop:;timer loop
+        sjmp t_loop
+        
 
 ;------------------ Serial Port ISR ---------------------
         org 100h
 serial: jb TI, trans
         mov a, sbuf0
-        mov p0,A
+        mov R4, A
         clr RI1 
+        cjne R4, #'r', next1 ;ASCII "R"
+            ;put the timer into run mode
+next1:  cjne R4, #'s', next2
+            ;stop the timer
+            jmp back
+next2:  cjne R4, #'c', next3
+            ;clear the counter
+            jmp back
+next3:  cjne R4, #'t', back
+            ;print to serial current count value                             
+            jmp back
+back:
         reti
 
 trans:  clr TI
