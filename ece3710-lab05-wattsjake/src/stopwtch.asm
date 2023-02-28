@@ -1,6 +1,6 @@
 ;********************************************************
-;Program Name:  "magic.asm"
-;Description:  
+;Program Name:  "stopwtch.asm"
+;Description: BCD stopwatch using interrupts
 ;
 ;Author:        Jacob Watts & Jack Fernald
 ;Organization:  Weber State University ECE 3710
@@ -21,13 +21,9 @@ $include (c8051f020.inc)
 ;R5 - 
 ;R6 -
 ;R7 - 
-;------------------------ DSEG --------------------------
-        DSEG AT 30H
-
-
 ;------------------------ CSEG --------------------------       
         CSEG
-;------- Crystal Setup Code -----------------------------        
+;------------------ 22.1184Mhz Set-UP -------------------     
         mov wdtcn,#0DEh ; disable watchdog 
         mov wdtcn,#0ADh 
         mov xbr2,#40h ; enable port output
@@ -55,36 +51,31 @@ clrall: mov     @r0,#0
         djnz    r0,clrall
 ;---------------PLACE CODE BELOW THIS LINE---------------
 
-;---------------- Initialization Code -------------------
-init:   
-        mov A, #0FFh 
-        mov P3, A
-        mov P5, A
-        call reset
-        RI1 bit 0C0h ;turn on flag for serial send
-        mov R1, #10
-        jmp tx_sub
+;--------------------- ORG 0 ---------------------------
+        org 0
+        jmp main
+
+        org 000Bh
+        cpl P0.1
+        reti
+
+        org 23h
+        jmp serial
+        org 30h 
 
 ;--------------------- Main Code ------------------------
 main:
-        
-        
-;--------------------- 10ms Delay ------------------------
-delay_10ms:
-            djnz R1,here
-            mov R1,#10 
-            
-here:       mov TL0, #000h ;-9216 for 5ms
-            mov TH0, #0DCh
-            setb TR0 ;start timer
-again:      jnb TF0, again
-            clr TR0
-            clr TF0
 
-            mov A, R1
-            mov rand_int, A
-            clr A; for good measure
-            clr C; for good measure
-            ret
 
-            END
+;------------------ Serial Port ISR ---------------------
+        org 100h
+serial: jb TI, trans
+        mov a, sbuf0
+        mov p0,A
+        clr RI1 
+        reti
+
+trans:  clr TI
+        reti 
+        END 
+
