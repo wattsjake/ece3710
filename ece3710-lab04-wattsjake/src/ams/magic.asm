@@ -60,11 +60,13 @@ clrall: mov     @r0,#0
 
 ;---------------- Initialization Code -------------------
 init:   
-        mov A, #0FFh
+        mov A, #0FFh 
         mov P3, A
         mov P5, A
+        call reset
         RI1 bit 0C0h ;turn on flag for serial send
         mov R1, #10
+        jmp tx_sub
 
 ;--------------------- Main Code ------------------------
 main:
@@ -81,6 +83,12 @@ serial_check:
         jnb ri, main ;jump to main if ri not set
         clr ri
         jmp tx_sub
+
+;------------------------ reset -------------------------
+reset:
+    mov A, #000h ;move zero(0) into a
+    mov rand_int, A
+    ret
 
 ;------------------------- tx ---------------------------
 tx_sub:
@@ -143,6 +151,7 @@ get_address:
             ret
 
 ;-------------------- message table ----------------------
+msg_0: DB 0Dh, 0Ah, 0
 msg_1: DB "It is certain", 0Dh, 0Ah, 0
 msg_2: DB "You may rely on it", 0Dh, 0Ah, 0
 msg_3: DB "Without a doubt", 0Dh, 0Ah, 0
@@ -152,10 +161,10 @@ msg_6: DB "Reply hazy, try again", 0Dh, 0Ah, 0
 msg_7: DB "Concentrate and ask again", 0Dh, 0Ah, 0
 msg_8: DB "Don't count on it", 0Dh, 0Ah, 0
 msg_9: DB "Very doubtful", 0Dh, 0Ah, 0
-msg_10: DB "My reply is no", 0Dh, 0Ah, 0
+msg_10:DB "My reply is no", 0Dh, 0Ah, 0
 
 ;------------------- msg idx table ----------------------
-msg_idx: DW msg_1, msg_2, msg_3, msg_4, msg_5, msg_6, msg_7, msg_8, msg_9, msg_10
+msg_idx: DW msg_0, msg_1, msg_2, msg_3, msg_4, msg_5, msg_6, msg_7, msg_8, msg_9, msg_10
 
 ;--------------------- LED table -------------------------
 led_table: DB 0FFh, 0FFh, 0FEh, 0FDh, 0FBh, 0F7h, 0EFh, 0DFh, 0BFh, 07Fh
