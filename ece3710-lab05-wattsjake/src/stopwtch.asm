@@ -11,7 +11,7 @@
 ;********************************************************                
 $include (c8051f020.inc)
 ;------------------------ TODO --------------------------
-
+;na
 ;--------------------- Registery ------------------------
 ;R0 - clr RAM but only in the beginning
 ;R1 - 
@@ -21,9 +21,21 @@ $include (c8051f020.inc)
 ;R5 - 
 ;R6 -
 ;R7 - 
+;----------------------- Timers -------------------------
+;Timer1 - Serial 
+;Timer2 - 100 Hz clock
+;------------------------ BSEG --------------------------
+        BSEG
+sw_flag:    dbit 1
+;------------------------ DSEG --------------------------
+        DSEG AT 21H
+current_button: ds 1
+last_button:    ds 1
+sw_time:        ds 1
+count:          ds 1
 ;------------------------ CSEG --------------------------       
         CSEG
-;------------------ 22.1184Mhz Set-UP -------------------     
+;----------------- 22.1184Mhz Crystal -------------------     
         mov wdtcn,#0DEh ; disable watchdog 
         mov wdtcn,#0ADh 
         mov xbr2,#40h ; enable port output
@@ -31,7 +43,20 @@ $include (c8051f020.inc)
         mov	oscxcn,#67H	; turn on external crystal
     	mov	tmod,#21H	; wait 1ms using T1 mode 2
     	mov	th1,#256-167	; 2MHz clock, 167 counts = 1ms
-    	setb	tr1
+    	setb tr1
+        jmp wait1
+
+;--------------------ISR for Serial ---------------------
+        ORG 23h
+        reti
+
+;--------------------ISR for Timer 2---------------------
+        ORG 2Bh
+        clr tf2
+        call check_buttons
+
+        reti
+
 wait1:
     	jnb	tf1,wait1
     	clr	tr1		; 1ms has elapsed, stop timer
@@ -45,58 +70,38 @@ wait2:
 	    mov	th1,#-6		; 9600 baud
 	    setb tr1		; start baud clock
 
+;------------------ Timer 2 (100 Hz)---------------------
+        mov RCAP2L, #LOW(-18432) ;set timer 2(100hz)
+        mov RCAP2H, #HIGH(-18432)
+        mov T2CON, #00000100B ;start timer 2
+
         ;clear all internal ram
         mov     r0,#255 
 clrall: mov     @r0,#0
         djnz    r0,clrall
 ;---------------PLACE CODE BELOW THIS LINE---------------
 
-;--------------------- ORG 0 ---------------------------
-        org 0
-        jmp main
-
-        org 000Bh
-        cpl P0.1
-        reti
-
-        org 23h
-        jmp serial
-        org 30h 
+;---------------- Initialization Code -------------------
+init:
+        mov IE, #10100000B
 
 ;--------------------- Main Code ------------------------
-main:
-        ;set up a timer for counting to 0.0-9.9
-        mov tmod, #20h
-        mov th1, #0FDh
-        mov scon, #50h
-        mov IE, #10010000B
-        setb tr1
+main:   jmp main
 
-t_loop:;timer loop
-        sjmp t_loop
+;------------------- Check Buttons ----------------------
+check_buttons:  MOV A, P1
+                MOV last_button, current_button ; Memory for next loop
+                CPL A ; Complement A
+                ANL A, #00000011B ; Mask out other bits from P1, we only care about the single button bit. Anding it with 1 will keep the state of the button
+                ; e.g. button = 1 and with 1 = 1, button = 0 and with 1 = 0. T
+                MOV current_button, A ; Move this newly found button state into current_button
+                clr A;for safety 
+                RET
         
+;------------------------ END ---------------------------
+        END
 
-;------------------ Serial Port ISR ---------------------
-        org 100h
-serial: jb TI, trans
-        mov a, sbuf0
-        mov R4, A
-        clr RI1 
-        cjne R4, #'r', next1 ;ASCII "R"
-            ;put the timer into run mode
-next1:  cjne R4, #'s', next2
-            ;stop the timer
-            jmp back
-next2:  cjne R4, #'c', next3
-            ;clear the counter
-            jmp back
-next3:  cjne R4, #'t', back
-            ;print to serial current count value                             
-            jmp back
-back:
-        reti
 
-trans:  clr TI
-        reti 
-        END 
+
+        
 
