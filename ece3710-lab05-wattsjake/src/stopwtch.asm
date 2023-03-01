@@ -33,6 +33,7 @@ current_button: ds 1
 last_button:    ds 1
 sw_time:        ds 1
 count:          ds 1
+select:         ds 1
 ;------------------------ CSEG --------------------------       
         CSEG
 ;----------------- 22.1184Mhz Crystal -------------------     
@@ -44,44 +45,131 @@ count:          ds 1
     	mov	tmod,#21H	; wait 1ms using T1 mode 2
     	mov	th1,#256-167	; 2MHz clock, 167 counts = 1ms
     	setb tr1
+
         jmp wait1
 
 ;----------------- ISR for Serial Com--------------------
         ORG 23h
+        call serial_crap
         reti
 
-;--------------------ISR for Timer 2---------------------
         ORG 2Bh
+        call timer_crap
+        reti
+
+
+
+
+
+
+serial_crap:
+        jbc TI, cont_send 
+        jbc RI, init_send
+
+init_send:
+        clr RI
+        mov A, sbuf0
+
+serial_R: 
+        cjne A, #'r', serial_S  
+        setb sw_flag
+        jmp return_sub
+serial_S:
+        cjne A, #'s', serial_C  
+        clr sw_flag
+serial_C:
+        cjne A, #'c', serial_T  
+        mov sw_time, #00h
+        mov A, sw_time
+        cpl A
+        mov P5, A
+        jmp return_sub
+serial_T:
+        cjne A, #'t', return_sub
+
+        mov A, sw_time
+        anl A, #0F0h
+        swap A
+        add A, #'0'
+        da a
+        mov sbuf0, A
+        mov select, #00h
+        jmp return_sub
+
+        
+
+cont_send:
+        inc select
+        mov A, select
+decimal:cjne A, #01h, tenths
+        mov sbuf0, #'.'
+        jmp return_sub
+tenths: cjne A, #02h, line_feed
+        mov A, sw_time
+        anl A, #00Fh
+        add A, #'0'
+        da a
+        mov sbuf0, A
+        jmp return_sub
+line_feed:
+        cjne A, #03h, carriage
+        mov sbuf0, #0Ah
+        jmp return_sub
+carriage:
+        cjne A, #04h, return_sub
+        mov sbuf0, #0Dh
+
+return_sub:
+        ret
+
+;--------------------ISR for Timer 2---------------------
+timer_crap:
         clr tf2
         call check_buttons
         mov A, current_button
+        cjne A, #00h, next
+        jmp toggle_time
+next:   cjne A, last_button, toggle_time
+          jmp return
 toggle_time:
         cjne A, #001h, reset_time
             cpl sw_flag
 reset_time:
-        cjne A, #002h, return
+        cjne A, #002h, sw_running
             clr A
             mov sw_time, A
 sw_running:
-        jb sw_flag, update_timer
-            jmp return 
+        jnb sw_flag, return
+ 
         
 update_timer:
+        jnb sw_flag, return
         mov A, count
-        djnz A, inc_time
-            jmp return
-        
-inc_time:
-        mov A, sw_time
-        inc A
-        mov sw_time, A
-        mov A, #10
+        djnz ACC, replace
+          cjne A, #99h, inc1
+          mov A, #0h
+          jmp inc2
+          ;Increment Timer 
+inc1:     mov A, sw_time
+          add A, #01
+          da a
+          mov sw_time, A
+inc2:     
+          cpl A
+          mov P5, A
+          ; Reset Counter
+          mov count, #10
+          jmp return         
+
+replace:
         mov count, A
-        jmp return            
 
 return:
-        reti ;if both buttons pressed reti 
-                             
+        ret ;if both buttons pressed reti 
+               
+               
+               
+;--------- Initilize More stuff? ------------------------                             
 wait1:
     	jnb	tf1,wait1
     	clr	tr1		; 1ms has elapsed, stop timer
@@ -108,7 +196,9 @@ clrall: mov     @r0,#0
 
 ;---------------- Initialization Code -------------------
 init:
-        mov IE, #10100000B
+        mov IE, #10110000B
+        mov count, #10
+        mov sw_time, #0
 
 ;--------------------- Main Code ------------------------
 main:   jmp main
